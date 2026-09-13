@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, type Transition, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { SectionTitle } from "./section-title";
 
 const panels = [
   { category: "TECH", description: "From architecture decisions to your first ten engineers — our studio CTO is in the weekly stand-ups.", number: "01", title: "A CTO in your corner" },
@@ -29,7 +30,7 @@ export function FounderPanels() {
   };
 
   return <section className="founder-section" aria-labelledby="founder-title">
-    <div className="founder-section-heading"><h2 id="founder-title">Not just a check,<br />an additional co-founder</h2><p>Most VCs show up at board meetings. We show up Sunday morning. From your first hire to your first paying customer, our studio team works inside the company — engineering, product, GTM, ops — until you&apos;ve earned your seed round.</p></div>
+    <div className="founder-section-heading"><SectionTitle id="founder-title">Not just a check,<br />an additional co-founder</SectionTitle><p>Most VCs show up at board meetings. We show up Sunday morning. From your first hire to your first paying customer, our studio team works inside the company — engineering, product, GTM, ops — until you&apos;ve earned your seed round.</p></div>
     <div className="founder-panels">
       {panels.map((panel, index) => {
         const isActive = activePanel === index;

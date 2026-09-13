@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { FounderPanels } from "./founder-panels";
 import { MarqueeEyebrow } from "./marquee-eyebrow";
+import { SectionTitle } from "./section-title";
 
 const logos = Array.from({ length: 8 }, (_, i) => `/figma/portfolio-logo-${i + 1}.png`);
 const marqueeLogos = [...logos, ...logos];
@@ -13,7 +14,7 @@ export default function Home() {
         <div className="hero-nav-links"><a href="#top">Home</a><a href="#philosophy">Studio</a><a href="#companies">Portfolio</a><a href="#philosophy">Team</a><a href="#philosophy">Resources</a></div>
         <a className="pitch-button hero-pitch" href="mailto:hello@profound.vc">Pitch us</a>
       </nav>
-      <div className="hero-content"><h1 className="hero-title--intro"><span>magic happens when you</span><span>put the focus on people</span></h1><p className="hero-copy--intro">We&apos;re an early-stage fund and studio supporting Israeli founders in software and AI, helping from idea to seed and beyond.</p><div className="hero-actions hero-actions--intro"><a className="pitch-button" href="mailto:hello@profound.vc">Pitch us</a><a href="#philosophy">How the Studio works</a></div></div>
+      <div className="hero-content"><h1 className="hero-title--intro"><span>magic happens when you</span><span>put the focus on <span className="hero-title-emphasis"><span>people</span></span></span></h1><p className="hero-copy--intro">We&apos;re an early-stage fund and studio supporting Israeli founders in software and AI, helping from idea to seed and beyond.</p><div className="hero-actions hero-actions--intro"><a className="pitch-button" href="mailto:hello@profound.vc">Pitch us</a><a href="#philosophy">How the Studio works</a></div></div>
       <div className="hero-showcase hero-showcase--intro">
         <div className="hero-feature-image"><Image alt="ProFound founders together" fill priority sizes="100vw" src="/figma/hero-background-2.png" /></div>
       </div>
@@ -26,7 +27,7 @@ export default function Home() {
         <article className="commitment-card commitment-card--lead">
           <div>
             <span aria-hidden="true" className="commitment-icon">✦</span>
-            <h2 id="commitment-title">One founder at a time.</h2>
+            <SectionTitle id="commitment-title">One founder at a time.</SectionTitle>
             <p>We keep the studio deliberately focused, so every company gets the attention, candor, and practical support it needs to move with conviction.</p>
           </div>
         </article>
@@ -46,7 +47,7 @@ export default function Home() {
     <section className="studio-section" id="philosophy" aria-labelledby="studio-title">
       <div className="studio-section-intro section-shell">
         <p className="eyebrow">In the trenches</p>
-        <h2 id="studio-title">We don&apos;t pitch from the sidelines. We build with you.</h2>
+        <SectionTitle id="studio-title">We don&apos;t pitch from the sidelines.<br className="studio-title-break" /> We build with you.</SectionTitle>
         <p>Operating as a studio means our work is tied directly to the outcomes that matter: clearer products, stronger teams, and real momentum with customers.</p>
       </div>
       <div className="studio-stories section-shell">
@@ -66,7 +67,7 @@ export default function Home() {
     </section>
     <footer className="site-footer">
       <div className="footer-cta section-shell">
-        <div><h2>Building something<br />profound?</h2><p>We back the unconventional. The first-time founder, the unexpected team, the idea that doesn&apos;t fit a thesis deck. If that&apos;s you — let&apos;s talk.</p><p>We meet founders early. Pre-product, pre-team, pre-anything is fine. Let us know what you&apos;re imagining.</p></div>
+        <div><SectionTitle>Building something<br />profound?</SectionTitle><p>We back the unconventional. The first-time founder, the unexpected team, the idea that doesn&apos;t fit a thesis deck. If that&apos;s you — let&apos;s talk.</p><p>We meet founders early. Pre-product, pre-team, pre-anything is fine. Let us know what you&apos;re imagining.</p></div>
         <div className="footer-email"><p className="eyebrow">Email us directly</p><a href="mailto:hello@profound.vc">hello@profound.vc</a></div>
       </div>
       <div className="footer-lower">
