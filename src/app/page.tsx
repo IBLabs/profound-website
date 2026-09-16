@@ -2,9 +2,21 @@ import Image from "next/image";
 import { FounderPanels } from "./founder-panels";
 import { MarqueeEyebrow } from "./marquee-eyebrow";
 import { SectionTitle } from "./section-title";
+import { StudioStories } from "./studio-stories";
 
 const logos = Array.from({ length: 8 }, (_, i) => `/figma/portfolio-logo-${i + 1}.png`);
 const marqueeLogos = [...logos, ...logos];
+const shootingStars = [
+  ["6%", "-74px", "5.8s", "-1.2s", ".72"],
+  ["15%", "-128px", "7.4s", "-4.3s", ".5"],
+  ["27%", "-96px", "6.6s", "-2.8s", ".82"],
+  ["39%", "-148px", "8.1s", "-6.5s", ".58"],
+  ["52%", "-82px", "5.5s", "-3.7s", ".68"],
+  ["63%", "-172px", "7.8s", "-1.9s", ".46"],
+  ["74%", "-112px", "6.2s", "-5.1s", ".78"],
+  ["86%", "-154px", "8.5s", "-3.1s", ".52"],
+  ["95%", "-90px", "6.9s", "-7.2s", ".64"],
+] as const;
 
 export default function Home() {
   return <main>
@@ -16,9 +28,14 @@ export default function Home() {
       </nav>
       <div className="hero-content"><h1 className="hero-title--intro"><span>magic happens when you</span><span>put the focus on <span className="hero-title-emphasis"><span>people</span></span></span></h1><p className="hero-copy--intro">We&apos;re an early-stage fund and studio supporting Israeli founders in software and AI, helping from idea to seed and beyond.</p><div className="hero-actions hero-actions--intro"><a className="pitch-button" href="mailto:hello@profound.vc">Pitch us</a><a href="#philosophy">How the Studio works</a></div></div>
       <div className="hero-showcase hero-showcase--intro">
-        <div className="hero-feature-image"><Image alt="ProFound founders together" fill priority sizes="100vw" src="/figma/hero-background-2.png" /></div>
+        <div className="hero-feature-image"><Image alt="ProFound founders together" fill priority sizes="100vw" src="/figma/hero-background-2-editorial.png" /></div>
       </div>
-      <div className="hero-logo-band"><div className="hero-marquee" aria-label="Portfolio companies"><MarqueeEyebrow /><div className="hero-logo-track">{marqueeLogos.map((logo, i) => <Image key={`${logo}-${i}`} src={logo} alt="" width={190} height={46} />)}</div></div></div>
+      <div className="hero-logo-band">
+        <div className="shooting-stars" aria-hidden="true">
+          {shootingStars.map(([left, height, duration, delay, size], index) => <span key={index} style={{ "--star-left": left, "--star-height": height, "--star-duration": duration, "--star-delay": delay, "--star-size": size } as React.CSSProperties} />)}
+        </div>
+        <div className="hero-marquee" aria-label="Portfolio companies"><MarqueeEyebrow /><div className="hero-logo-track">{marqueeLogos.map((logo, i) => <Image key={`${logo}-${i}`} src={logo} alt="" width={190} height={46} />)}</div></div>
+      </div>
       <div className="hero-dusk" aria-hidden="true" />
     </section>
     <FounderPanels />
@@ -50,25 +67,12 @@ export default function Home() {
         <SectionTitle id="studio-title">We don&apos;t pitch from the sidelines.<br className="studio-title-break" /> We build with you.</SectionTitle>
         <p>Operating as a studio means our work is tied directly to the outcomes that matter: clearer products, stronger teams, and real momentum with customers.</p>
       </div>
-      <div className="studio-stories section-shell">
-        <article className="studio-story">
-          <div aria-hidden="true" className="studio-story-placeholder" />
-          <blockquote><p>We get close to the work early, turning the questions in front of you into a focused next move.</p><cite>— Founder name</cite></blockquote>
-        </article>
-        <article className="studio-story">
-          <div aria-hidden="true" className="studio-story-placeholder" />
-          <blockquote><p>From product and engineering to the first go-to-market motions, we build the foundations alongside your team.</p><cite>— Founder name</cite></blockquote>
-        </article>
-        <article className="studio-story">
-          <div aria-hidden="true" className="studio-story-placeholder" />
-          <blockquote><p>The result is practical momentum: better decisions, real progress, and the room to keep moving with conviction.</p><cite>— Founder name</cite></blockquote>
-        </article>
-      </div>
+      <StudioStories />
     </section>
     <footer className="site-footer">
       <div className="footer-cta section-shell">
         <div><SectionTitle>Building something<br />profound?</SectionTitle><p>We back the unconventional. The first-time founder, the unexpected team, the idea that doesn&apos;t fit a thesis deck. If that&apos;s you — let&apos;s talk.</p><p>We meet founders early. Pre-product, pre-team, pre-anything is fine. Let us know what you&apos;re imagining.</p></div>
-        <div className="footer-email"><p className="eyebrow">Email us directly</p><a href="mailto:hello@profound.vc">hello@profound.vc</a></div>
+        <div className="footer-email"><p className="eyebrow">Email us directly</p><a href="mailto:hello@profound.vc?subject=I%20have%20an%20idea%20for%20ProFound">hello@profound.vc</a></div>
       </div>
       <div className="footer-lower">
         <div className="footer-grid section-shell">

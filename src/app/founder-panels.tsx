@@ -1,49 +1,59 @@
 "use client";
 
-import { AnimatePresence, motion, type Transition, useReducedMotion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { SectionTitle } from "./section-title";
 
-const panels = [
-  { category: "TECH", description: "From architecture decisions to your first ten engineers — our studio CTO is in the weekly stand-ups.", number: "01", title: "A CTO in your corner" },
-  { category: "GTM", description: "We build your path to first customers, pressure-test the narrative, and open the right early doors.", number: "02", title: "Go to market, together" },
-  { category: "PEOPLE", description: "The right team changes the trajectory. We help make the early hires count.", number: "03", title: "People around the table" },
-  { category: "CAPITAL", description: "We stay close from idea through seed and beyond, with the resources to help you move decisively.", number: "04", title: "Capital for the long run" },
+const slides = [
+  { alt: "Team mapping a strategy on a glass board", description: "What it takes to turn a sharp technical insight into a company: a focused first prototype, the right early team, and the conviction to keep moving before the market sees it.", image: "/figma/founders/conviction.jpg", logo: "/figma/portfolio-logo-1.png", title: "Building conviction before the first round" },
+  { alt: "Team celebrating a product launch", description: "The conversations, customer signals, and practical experiments that turn a promising early product into real momentum — and give a team the confidence to make its next move.", image: "/figma/founders/successful_product_launch.jpg", logo: "/figma/portfolio-logo-2.png", title: "The work behind a confident product launch" },
+  { alt: "Chess board prepared for the next move", description: "How exceptional teams turn a clear point of view into a company built to grow with intention, while protecting the speed and focus that made the idea matter in the first place.", image: "/figma/founders/next_move.jpg", logo: "/figma/portfolio-logo-3.png", title: "Finding the right next move with intention" },
 ];
 
+const slideDuration = 6000;
+
 export function FounderPanels() {
-  const [activePanel, setActivePanel] = useState(0);
-  const [revealedPanel, setRevealedPanel] = useState<number | null>(0);
-  const activePanelRef = useRef(activePanel);
+  const [activeSlide, setActiveSlide] = useState(0);
   const reduceMotion = useReducedMotion();
-  const transition: Transition = reduceMotion ? { duration: 0 } : { duration: 0.55, ease: [0.22, 1, 0.36, 1] };
 
   useEffect(() => {
-    activePanelRef.current = activePanel;
-  }, [activePanel]);
+    if (reduceMotion) return;
 
-  const selectPanel = (index: number) => {
-    if (index === activePanel) return;
+    const timeout = window.setTimeout(() => {
+      setActiveSlide((currentSlide) => (currentSlide + 1) % slides.length);
+    }, slideDuration);
 
-    setRevealedPanel(null);
-    setActivePanel(index);
-  };
+    return () => window.clearTimeout(timeout);
+  }, [activeSlide, reduceMotion]);
 
-  return <section className="founder-section" aria-labelledby="founder-title">
-    <div className="founder-section-heading"><SectionTitle id="founder-title">Not just a check,<br />an additional co-founder</SectionTitle><p>Most VCs show up at board meetings. We show up Sunday morning. From your first hire to your first paying customer, our studio team works inside the company — engineering, product, GTM, ops — until you&apos;ve earned your seed round.</p></div>
-    <div className="founder-panels">
-      {panels.map((panel, index) => {
-        const isActive = activePanel === index;
-        const isRevealed = revealedPanel === index;
-        return <motion.button animate={{ flex: isActive ? 4.4 : 1 }} aria-pressed={isActive} className="founder-panel" key={panel.number} layout onAnimationComplete={() => { if (activePanelRef.current === index) setRevealedPanel(index); }} onClick={() => selectPanel(index)} transition={transition} type="button">
-          <span className="founder-panel-shade" />
-          <span className="founder-panel-content">
-            <span className="founder-panel-meta"><span className="founder-panel-category">{panel.category}</span><span>{panel.number}</span></span>
-            <span className="founder-panel-title">{panel.title}</span>
-            <AnimatePresence initial={false}>{isRevealed && <motion.span animate={{ opacity: 1, height: "auto" }} className="founder-panel-description" exit={{ opacity: 0, height: 0 }} initial={{ opacity: 0, height: 0 }} transition={transition}>{panel.description}</motion.span>}</AnimatePresence>
-          </span>
-        </motion.button>;
-      })}
+  return <section className="news-section" id="news" aria-labelledby="news-title">
+    <div className="news-section-heading">
+      <p className="news-eyebrow">Studio dispatches</p>
+      <div className="news-copy">
+        <div className="news-logo-slot"><AnimatePresence initial={false} mode="wait">
+          <motion.div animate={{ opacity: 1, x: 0 }} className="news-copy-logo" exit={{ opacity: 0, x: 28 }} initial={{ opacity: 0, x: -28 }} key={slides[activeSlide].logo} transition={{ duration: reduceMotion ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}><Image alt="Portfolio company logo" className="news-company-logo" height={40} src={slides[activeSlide].logo} style={{ height: "2rem", width: "auto" }} width={160} /></motion.div>
+        </AnimatePresence></div>
+        <SectionTitle id="news-title" key={slides[activeSlide].title}>{slides[activeSlide].title}</SectionTitle>
+        <div className="news-details-slot"><AnimatePresence initial={false} mode="wait">
+          <motion.div animate={{ opacity: 1, x: 0 }} className="news-copy-details" exit={{ opacity: 0, x: 28 }} initial={{ opacity: 0, x: -28 }} key={slides[activeSlide].image} transition={{ duration: reduceMotion ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}><p>{slides[activeSlide].description}</p><div className="news-copy-actions"><a className="news-read-more" href="#news">Read More</a></div></motion.div>
+        </AnimatePresence></div>
+      </div>
+      <div aria-label="News articles" className="news-page-controls" role="tablist">
+        {slides.map((slide, index) => {
+          const isActive = index === activeSlide;
+          return <button aria-controls="news-carousel" aria-label={`Show news article ${index + 1}`} aria-selected={isActive} className={`news-page-control${isActive ? " is-active" : ""}`} key={slide.image} onClick={() => setActiveSlide(index)} role="tab" type="button">
+            {isActive && <span className="news-page-control-fill" key={activeSlide} />}
+          </button>;
+        })}
+      </div>
+    </div>
+    <div className="news-carousel" id="news-carousel">
+      <AnimatePresence initial={false} mode="wait">
+        <motion.div animate={{ opacity: 1 }} className="news-carousel-slide" exit={{ opacity: 0 }} initial={{ opacity: 0 }} key={slides[activeSlide].image} transition={{ duration: reduceMotion ? 0 : 0.55, ease: [0.22, 1, 0.36, 1] }}>
+          <Image alt={slides[activeSlide].alt} fill priority={activeSlide === 0} sizes="(max-width: 800px) calc(100vw - 2rem), 82vw" src={slides[activeSlide].image} />
+        </motion.div>
+      </AnimatePresence>
     </div>
   </section>;
 }
