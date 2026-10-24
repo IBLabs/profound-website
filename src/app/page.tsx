@@ -22,8 +22,8 @@ export default function Home() {
   return <main>
     <section className="hero" id="top">
       <nav className="hero-nav hero-nav--intro" aria-label="Primary navigation">
-        <a className="hero-wordmark" href="#top"><span>Pro</span>found</a>
-        <div className="hero-nav-links"><a href="#top">Home</a><a href="#philosophy">Studio</a><a href="#companies">Portfolio</a><a href="#philosophy">Team</a><a href="#philosophy">Resources</a></div>
+        <a className="hero-wordmark" href="#top"><Image alt="ProFound" className="brand-logo brand-logo--header" height={30} priority src="/figma/profound-logo.svg" width={120} /></a>
+        <div className="hero-nav-links"><a href="#top">Home</a><a href="#philosophy">Studio</a><a href="#companies">Portfolio</a><a href="/team">Team</a></div>
         <a className="pitch-button hero-pitch" href="mailto:hello@profound.vc">Pitch us</a>
       </nav>
       <div className="hero-content"><h1 className="hero-title--intro"><span>magic happens when you</span><span>put the focus on <span className="hero-title-emphasis"><span>people</span></span></span></h1><p className="hero-copy--intro">We&apos;re an early-stage fund and studio supporting Israeli founders in software and AI, helping from idea to seed and beyond.</p><div className="hero-actions hero-actions--intro"><a className="pitch-button" href="mailto:hello@profound.vc">Pitch us</a><a href="#philosophy">How the Studio works</a></div></div>
@@ -76,9 +76,9 @@ export default function Home() {
       </div>
       <div className="footer-lower">
         <div className="footer-grid section-shell">
-          <div className="footer-brand"><a className="footer-wordmark" href="#top"><span>✳</span> ProFound</a><p>Early-stage fund &amp; co-creation studio for unconventional software and AI founders.</p></div>
+          <div className="footer-brand"><a className="footer-wordmark" href="#top"><Image alt="ProFound" className="brand-logo brand-logo--footer" height={40} src="/figma/profound-logo.svg" width={160} /></a><p>Early-stage fund &amp; co-creation studio for unconventional software and AI founders.</p></div>
           <nav aria-label="Fund links"><h3>Fund</h3><a href="#top">Home</a><a href="#philosophy">Studio</a><a href="#companies">Legacy Portfolio</a><a href="#philosophy">Resources</a></nav>
-          <nav aria-label="Company links"><h3>Company</h3><a href="#philosophy">Team</a><a href="mailto:hello@profound.vc">Contact</a></nav>
+          <nav aria-label="Company links"><h3>Company</h3><a href="/team">Team</a><a href="mailto:hello@profound.vc">Contact</a></nav>
           <address><h3>Office</h3><p>Arik Einstein 3 Floor 4,<br />Herzliya, Israel</p><a href="mailto:hello@profound.vc">hello@profound.vc</a></address>
           <p className="footer-copyright">© {new Date().getFullYear()} ProFound Ventures</p>
         </div>
