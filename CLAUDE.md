@@ -1,1 +1,2 @@
 @AGENTS.md
+@BRAND_GUIDELINES.md
