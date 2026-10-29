@@ -1,68 +1,268 @@
 import Image from "next/image";
-import Link from "next/link";
 import type { Metadata } from "next";
+import { ScrollReveal } from "../scroll-reveal";
 
 export const metadata: Metadata = {
   title: "Team — ProFound",
-  description: "Meet the operators, technologists, and ecosystem connectors building ProFound alongside Israel's next generation of founders.",
+  description:
+    "Meet the operators, technologists, and ecosystem connectors building ProFound alongside Israel's next generation of founders.",
 };
 
-const team = [
-  ["Adi Gozes", "Managing Partner", "Previously Partner at Entrée Capital with board experience across Rivery, Cypago, and Confetti; investment team at Samsung Catalyst Fund; and Director of Products at Vision Map (acquired by Rafael). She served as an officer in 8200."],
-  ["Lee Moser", "Founding Partner", "Background spanning government, business development, and venture. Previously Head of Global Relations at iAngels, with deep experience connecting Israeli founders to international markets."],
-  ["Ron Porat", "CTO", "Serial entrepreneur with multiple exits — CEO & Founder of Hacktics (acquired by EY) and Seeker (acquired by Synopsys); Co-Founder of Shine and CTO/Co-Founder of L1ght. Owns the tech pillar."],
-  ["Dalit Krainer", "People & Growth", "Former Global VP HR at Amdocs, Chief HR Officer at Checkmarx, and Director of HR at Comverse. Owns the organization pillar — leadership, comp, and culture."],
-  ["Noy Dan", "Studio Director", "Former Product Manager at WalkMe, Director of Investor Relations at iAngels, and Chief of Staff to the Deputy Ambassador at the Israeli Embassy in Washington, DC. Owns the GTM pillar."],
-  ["Tomer Haviv", "Analyst", "Supports deal sourcing, diligence, and portfolio company analytics across the fund and the studio."],
-  ["Danielle Zettel", "Director, Investor Relations & Communications", "Owns LP relationships, fund communications, and the partner narrative — keeping investors close and the Profound story sharp."],
-  ["Matan Malka", "Assistant Controller", "Owns fund accounting, capital calls, and portfolio reporting. Keeps the financial backbone of the fund precise and audit-ready."],
-  ["Paz Lazar", "Chief of Staff", "Connective tissue across the partners, studio, and portfolio. Runs operations, project execution, and the cadence that keeps the team in motion."],
-] as const;
+interface TeamMember {
+  name: string;
+  role: string;
+  image: string;
+  bio: string;
+}
 
-const agents = [
-  ["Echo", "AI Analyst Agent", "Our autonomous research analyst. Echo continuously scans the Israeli ecosystem, drafts memos, runs market mapping, and surfaces founders worth meeting — 24/7 at the speed of the market."],
-  ["Iris", "AI Personal Assistant", "Our team’s AI chief of staff. Iris handles inbox triage, scheduling, founder follow-ups, and meeting prep so the partners spend more time in the trenches with founders and less time on logistics."],
-] as const;
+const teamMembers: TeamMember[] = [
+  {
+    name: "Adi Gozes",
+    role: "Managing Partner",
+    image: "/team/Adi.jpeg",
+    bio: "Previously Partner at Entrée Capital with board experience across Rivery, Cypago, and Confetti; investment team at Samsung Catalyst Fund; and Director of Products at Vision Map (acquired by Rafael). She served as an officer in 8200.",
+  },
+  {
+    name: "Lee Moser",
+    role: "Founding Partner",
+    image: "/team/lee.jpg",
+    bio: "Background spanning government, business development, and venture. Previously Head of Global Relations at iAngels, with deep experience connecting Israeli founders to international markets.",
+  },
+  {
+    name: "Ron Porat",
+    role: "CTO",
+    image: "/team/ron.jpg",
+    bio: "Serial entrepreneur with multiple exits — CEO & Founder of Hacktics (acquired by EY) and Seeker (acquired by Synopsys); Co-Founder of Shine and CTO/Co-Founder of L1ght. Owns the tech pillar.",
+  },
+  {
+    name: "Dalit Krainer",
+    role: "People & Growth",
+    image: "/team/dalit.jpg",
+    bio: "Former Global VP HR at Amdocs, Chief HR Officer at Checkmarx, and Director of HR at Comverse. Owns the organization pillar — leadership, comp, and culture.",
+  },
+  {
+    name: "Noy Dan",
+    role: "Studio Director",
+    image: "/team/noy.png",
+    bio: "Former Product Manager at WalkMe, Director of Investor Relations at iAngels, and Chief of Staff to the Deputy Ambassador at the Israeli Embassy in Washington, DC. Owns the GTM pillar.",
+  },
+  {
+    name: "Danielle Zettel",
+    role: "Director, Investor Relations & Communications",
+    image: "/team/danielle.jpg",
+    bio: "Owns LP relationships, fund communications, and the partner narrative — keeping investors close and the Profound story sharp.",
+  },
+  {
+    name: "Paz Lazar",
+    role: "Chief of Staff",
+    image: "/team/paz.png",
+    bio: "Connective tissue across the partners, studio, and portfolio. Runs operations, project execution, and the cadence that keeps the team in motion.",
+  },
+  {
+    name: "Tomer Haviv",
+    role: "Analyst",
+    image: "/team/tomer.jpeg",
+    bio: "Supports deal sourcing, diligence, and portfolio company analytics across the fund and the studio.",
+  },
+  {
+    name: "Matan Malka",
+    role: "Assistant Controller",
+    image: "/team/matan.jpg",
+    bio: "Owns fund accounting, capital calls, and portfolio reporting. Keeps the financial backbone of the fund precise and audit-ready.",
+  },
+];
 
-const advisors = [
-  ["Gary Ginsberg", "Co-Founder & Board Member at 25Madison. A seasoned communications and media leader with senior roles spanning the Clinton administration, Time Warner, News Corp, and Softbank, and a sitting board member across several public-interest organizations."],
-  ["Josh Fidler", "Co-Chairman & COO at Chesapeake Realty Partners. NYU Law alum with a long track record in real estate development, investment, and community leadership across the Mid-Atlantic."],
-  ["Vladimir Kitaygorodsky", "Founder & Managing Partner of Shibumi Capital. Previously at Bowdoin College and at Morgan Stanley and UBS, with two decades of experience leading private equity, public-market, and institutional allocation across global venture and growth strategies."],
-] as const;
+interface Advisor {
+  name: string;
+  role: string;
+  image: string;
+  bio: string;
+}
 
-const principles = [
-  ["01", "In the trenches", "Not advisors", "We sit alongside founders on the hardest problems — recruiting, product, GTM — for as long as it takes."],
-  ["02", "One at a time", "Bespoke, not batched", "No cohorts, no demo days. Every Studio company gets a program tuned to its team and its stage."],
-  ["03", "Global from day one", "Israel → US", "From day one we engineer for the U.S. market — through our network, NYC roadshow, and global partners."],
-] as const;
+const advisors: Advisor[] = [
+  {
+    name: "Gary Ginsberg",
+    role: "Advisor",
+    image: "/team/gary.jpg",
+    bio: "Co-Founder & Board Member at 25Madison. A seasoned communications and media leader with senior roles spanning the Clinton administration, Time Warner, News Corp, and Softbank, and a sitting board member across several public-interest organizations.",
+  },
+  {
+    name: "Josh Fidler",
+    role: "Advisor",
+    image: "/team/josh.jpeg",
+    bio: "Co-Chairman & COO at Chesapeake Realty Partners. NYU Law alum with a long track record in real estate development, investment, and community leadership across the Mid-Atlantic.",
+  },
+  {
+    name: "Vladimir Kitaygorodsky",
+    role: "Advisor",
+    image: "/team/vlad.jpeg",
+    bio: "Founder & Managing Partner of Shibumi Capital. Previously at Bowdoin College and at Morgan Stanley and UBS, with two decades of experience leading private equity, public-market, and institutional allocation across global venture and growth strategies.",
+  },
+];
+
+interface ValuePrinciple {
+  number: string;
+  title: string;
+  description: string;
+}
+
+const values: ValuePrinciple[] = [
+  {
+    number: "01 / IN THE TRENCHES",
+    title: "Not advisors",
+    description:
+      "We sit alongside founders on the hardest problems — recruiting, product, GTM — for as long as it takes.",
+  },
+  {
+    number: "02 / ONE AT A TIME",
+    title: "Bespoke, not batched",
+    description:
+      "No cohorts, no demo days. Every Studio company gets a program tuned to its team and its stage.",
+  },
+  {
+    number: "03 / GLOBAL FROM DAY ONE",
+    title: "Israel → US",
+    description:
+      "From day one we engineer for the U.S. market — through our network, NYC roadshow, and global partners.",
+  },
+];
 
 export default function TeamPage() {
-  return <main className="team-page">
-    <header className="team-masthead">
-      <nav className="team-nav section-shell" aria-label="Primary navigation">
-        <Link href="/"><Image alt="ProFound" className="brand-logo brand-logo--header" height={30} priority src="/figma/profound-logo-dark.svg" width={120} /></Link>
-        <div className="team-nav-links"><Link href="/">Home</Link><Link href="/#philosophy">Studio</Link><Link href="/#companies">Portfolio</Link><Link aria-current="page" href="/team">Team</Link></div>
-        <a className="pitch-button team-pitch" href="mailto:hello@profound.vc">Pitch us</a>
-      </nav>
-      <div className="team-intro section-shell">
-        <p className="eyebrow">Our team</p>
-        <h1>A team of investors<br />and operators.</h1>
-        <p>A group of builders, technologists, and ecosystem connectors who have walked the path our founders are walking — and stay close enough to walk it again with them.</p>
-      </div>
-    </header>
+  return (
+    <main className="team-page">
+      {/* Hero Section */}
+      <section className="team-hero">
+        <div className="section-shell">
+          <ScrollReveal className="team-intro" yOffset={18}>
+            <p className="eyebrow">Our team</p>
+            <h1>
+              A Team of <br className="team-br-desktop" />
+              <span className="team-title-emphasis">
+                <em>Investors and Operators</em>
+              </span>
+            </h1>
+            <p className="team-intro-lead">
+              A group of builders, technologists, and ecosystem connectors who have walked
+              the path our founders are walking — and stay close enough to walk it again with them.
+            </p>
+            <p className="team-intro-note">
+              We combine venture experience, deep technical leadership, and institutional-grade
+              operations to run a studio-driven fund built for early-stage Israel.
+            </p>
+          </ScrollReveal>
+        </div>
+      </section>
 
-    <section className="team-roster section-shell" aria-labelledby="team-roster-title">
-      <div className="team-section-heading"><p className="eyebrow">The team</p><h2 id="team-roster-title">Built to stay close<br />to the work.</h2><p>We combine venture experience, deep technical leadership, and institutional-grade operations to run a studio-driven fund built for early-stage Israel.</p></div>
-      <figure className="team-portrait"><Image alt="The ProFound team together" height={1024} sizes="(max-width: 800px) 100vw, 90vw" src="/figma/founders/profound-team.png" width={1536} /></figure>
-      <div className="team-grid">{team.map(([name, role, bio], index) => <article className="team-member" key={name}><span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><h3>{name}</h3><p className="team-role">{role}</p><p>{bio}</p></article>)}</div>
-    </section>
+      {/* Team Roster Grid */}
+      <section className="team-section" aria-labelledby="team-roster-title" style={{ paddingTop: "clamp(1.5rem, 2.5vw, 2.5rem)" }}>
+        <div className="section-shell">
+          <div className="team-grid-3">
+            {teamMembers.map((member, index) => (
+              <ScrollReveal
+                key={member.name}
+                delay={(index % 3) * 0.08}
+                yOffset={20}
+              >
+                <article className="team-card">
+                  <div className="team-card-photo">
+                    <Image
+                      alt={member.name}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      src={member.image}
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
+                  <div className="team-card-content">
+                    <h3 className="team-member-name">{member.name}</h3>
+                    <p className="team-member-role">{member.role}</p>
+                    <p className="team-member-bio">{member.bio}</p>
+                  </div>
+                </article>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
 
-    <section className="team-agents" aria-labelledby="agents-title"><div className="section-shell"><div className="team-section-heading"><p className="eyebrow">AI teammates</p><h2 id="agents-title">Always in the<br />field.</h2></div><div className="agent-grid">{agents.map(([name, role, bio]) => <article key={name}><div><span className="agent-mark" aria-hidden="true">✦</span><p className="team-role">{role}</p><h3>{name}</h3></div><p>{bio}</p></article>)}</div></div></section>
+      {/* Advisors Section */}
+      <section className="team-section" aria-labelledby="advisors-title" style={{ paddingTop: 0 }}>
+        <div className="section-shell">
+          <ScrollReveal className="team-section-header" yOffset={18}>
+            <p className="eyebrow">Advisors</p>
+            <h2 id="advisors-title">
+              The bench behind{" "}
+              <span className="team-title-emphasis">
+                <em>our founders.</em>
+              </span>
+            </h2>
+            <p>
+              A small, hand-picked group of operators and investors who lend their
+              experience to our portfolio — on capital, real estate, public markets,
+              and global growth.
+            </p>
+          </ScrollReveal>
 
-    <section className="team-advisors section-shell" aria-labelledby="advisors-title"><div className="team-section-heading"><p className="eyebrow">Advisors</p><h2 id="advisors-title">The bench behind<br />our founders.</h2><p>A small, hand-picked group of operators and investors who lend their experience to our portfolio — on capital, real estate, public markets, and global growth.</p></div><div className="advisor-list">{advisors.map(([name, bio]) => <article key={name}><h3>{name}</h3><p>Advisor</p><p>{bio}</p></article>)}</div></section>
+          <div className="team-grid-3">
+            {advisors.map((advisor, index) => (
+              <ScrollReveal
+                key={advisor.name}
+                delay={(index % 3) * 0.08}
+                yOffset={20}
+              >
+                <article className="team-card">
+                  <div className="team-card-photo">
+                    <Image
+                      alt={advisor.name}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      src={advisor.image}
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
+                  <div className="team-card-content">
+                    <h3 className="team-member-name">{advisor.name}</h3>
+                    <p className="team-member-role">{advisor.role}</p>
+                    <p className="team-member-bio">{advisor.bio}</p>
+                  </div>
+                </article>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
 
-    <section className="team-principles" aria-labelledby="principles-title"><div className="section-shell"><div className="team-section-heading"><p className="eyebrow">How we work</p><h2 id="principles-title">What founders can<br />expect from us.</h2></div><div className="principle-list">{principles.map(([number, label, title, copy]) => <article key={number}><span>{number}</span><p>{label}</p><h3>{title}</h3><p>{copy}</p></article>)}</div></div></section>
+      {/* How We Work / Values Section */}
+      <section className="team-values-section" aria-labelledby="values-title">
+        <div className="section-shell">
+          <ScrollReveal className="team-section-header" yOffset={18}>
+            <p className="eyebrow">How we work</p>
+            <h2 id="values-title">
+              What founders can{" "}
+              <span className="team-title-emphasis">
+                <em>expect from us.</em>
+              </span>
+            </h2>
+          </ScrollReveal>
 
-    <footer className="team-footer"><div className="section-shell"><p className="eyebrow">Want to join us?</p><h2>Build with us — as a founder,<br />or as a teammate.</h2><p>Drop us a line. We meet early.</p><a className="pitch-button" href="mailto:hello@profound.vc">hello@profound.vc</a><div className="team-footer-bottom"><Link href="/"><Image alt="ProFound" className="brand-logo brand-logo--footer" height={40} src="/figma/profound-logo.svg" width={160} /></Link><span>© {new Date().getFullYear()} ProFound Ventures</span></div></div></footer>
-  </main>;
+          <div className="team-grid-3">
+            {values.map((val, index) => (
+              <ScrollReveal
+                key={val.number}
+                delay={index * 0.08}
+                yOffset={20}
+              >
+                <div className="team-value-card">
+                  <span className="team-value-num">{val.number}</span>
+                  <h3 className="team-value-title">{val.title}</h3>
+                  <p className="team-value-desc">{val.description}</p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+    </main>
+  );
 }

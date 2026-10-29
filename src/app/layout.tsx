@@ -26,6 +26,9 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "500"],
 });
 
+import { SiteHeader } from "./site-header";
+import { SiteFooter } from "./site-footer";
+
 export const metadata: Metadata = {
   title: "ProFound — Venture Capital",
   description: "ProFound partners with exceptional founders from the first belief to the lasting company.",
@@ -37,7 +40,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${manrope.variable} ${libreBaskerville.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <SiteHeader />
+        <div className="flex-1">{children}</div>
+        <SiteFooter />
+      </body>
     </html>
   );
 }
