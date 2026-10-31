@@ -1,99 +1,130 @@
 import type { CSSProperties, ReactNode } from "react";
 import styles from "./team-values.module.css";
 
-type Point = [number, number, number?];
-type BoxFaces = { top: string; right: string; front: string };
-
 function BrandGradient({ id }: { id: string }) {
   return <defs><linearGradient id={id} x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#F6961C"/><stop offset=".4" stopColor="#F6631C"/><stop offset=".7" stopColor="#EE4711"/><stop offset="1" stopColor="#D91C07"/></linearGradient></defs>;
 }
 
-// 2:1 isometric projection shared by every artwork, so they read as one set with the hero.
-function projector(ox: number, oy: number) {
-  const iso = ([x, y, z = 0]: Point) => `${ox + x - y},${oy + (x + y) / 2 - z}`;
-  const face = (...points: Point[]) => `M${points.map(iso).join("L")}Z`;
-  const box = (x: number, y: number, w: number, d: number, h: number): BoxFaces => ({
-    top: face([x, y, h], [x + w, y, h], [x + w, y + d, h], [x, y + d, h]),
-    right: face([x + w, y, 0], [x + w, y + d, 0], [x + w, y + d, h], [x + w, y, h]),
-    front: face([x, y + d, 0], [x + w, y + d, 0], [x + w, y + d, h], [x, y + d, h]),
-  });
-  return { face, box };
-}
+const at = (s: number) => ({ animationDelay: `${s}s` });
+// Value-card parts pause until their card is on screen (team-experience toggles data-animating), hence `motion` on each.
+const m = (...names: string[]) => [styles.motion, ...names].join(" ");
+// 45° hatch strokes covering a box; clip them to the shape they shade.
+const hatch = (x0: number, y0: number, x1: number, y1: number, step = 6) => {
+  const h = y1 - y0;
+  return Array.from({ length: Math.ceil((x1 - x0 + h) / step) + 1 }, (_, i) => `M${x0 - h + i * step} ${y0}l${h} ${h}`).join("");
+};
+const cross = (x: number, y: number) => `M${x - 5} ${y}h10M${x} ${y - 5}v10`;
 
-function Box({ faces }: { faces: BoxFaces }) {
-  return <g><path className={styles.front} d={faces.front} /><path className={styles.right} d={faces.right} /><path className={styles.top} d={faces.top} /></g>;
-}
-
-const STAIRS_X = 88, STAIRS_Y = 154, STEP_DEPTH = 22, STEP_RISE = 18;
-
-function StairsArtwork() {
-  const { box } = projector(STAIRS_X, STAIRS_Y);
-  const steps = [3, 2, 1, 0].map(i => ({ i, faces: box(0, -(i + 1) * STEP_DEPTH, 56, STEP_DEPTH, (i + 1) * STEP_RISE) }));
-  // Markers start centred on step 1; the climb keyframes move them by one step vector (22, -29) at a time.
-  const marker = (x: number) => [STAIRS_X + x + STEP_DEPTH / 2, STAIRS_Y + (x - STEP_DEPTH / 2) / 2 - STEP_RISE] as const;
-  // Each marker hops on its own arc height and lags slightly, so the pair doesn't move in lockstep.
-  const climbers = [{ x: 16, fill: "var(--ink)", lift: 10, delay: 0 }, { x: 38, fill: "url(#values-stairs)", lift: 6, delay: .22 }];
+// Each value card is a small construction sheet in the hero's style: a ruled grid that fades at the edges,
+// faint guides inside the same fade, then the ink drawing and one hatched orange highlight on top.
+function Sheet({ id, guides, children }: { id: string; guides?: ReactNode; children: ReactNode }) {
+  const xs = [160, 126, 194, 71, 249, 16, 304], ys = [110, 76, 144, 21, 199];
   return (
     <svg viewBox="0 0 320 220" aria-hidden="true">
-      <BrandGradient id="values-stairs" />
-      {steps.map(({ i, faces }) => (
-        <g className={`${styles.motion} ${styles.rise}`} key={i} style={{ animationDelay: `${i * 90}ms` }}>
-          <Box faces={faces} />
-          {i === 3 && <path className={`${styles.motion} ${styles.summit}`} d={faces.top} fill="url(#values-stairs)" />}
+      <BrandGradient id={`${id}-gold`} />
+      <defs>
+        <radialGradient id={`${id}-fade`}><stop offset=".4" stopColor="#fff" /><stop offset="1" stopColor="#000" /></radialGradient>
+        <mask id={`${id}-edges`}><rect width="320" height="220" fill={`url(#${id}-fade)`} /></mask>
+      </defs>
+      <g mask={`url(#${id}-edges)`}>
+        <g className={styles.heroGrid}>
+          {xs.map(x => <path key={`x${x}`} className={m(styles.growY)} d={`M${x} 0V220`} style={{ ...at(Math.abs(x - 160) / 150), transformOrigin: "160px 110px" }} />)}
+          {ys.map(y => <path key={`y${y}`} className={m(styles.growX)} d={`M0 ${y}H320`} style={{ ...at(.1 + Math.abs(y - 110) / 150), transformOrigin: "160px 110px" }} />)}
+        </g>
+        <g className={styles.construct}>{guides}</g>
+      </g>
+      {children}
+    </svg>
+  );
+}
+
+const STEP_W = 44, STEP_H = 28, STAIR_X = 70, GROUND = 180;
+const treadTop = (k: number) => GROUND - STEP_H * (k + 1);
+
+// 01: a staircase in elevation. Two markers (founder in ink, Profound in orange) hop up along drawn arcs.
+function StairsArtwork() {
+  const profile = `M${STAIR_X} ${GROUND}${[0, 1, 2, 3].map(k => `V${treadTop(k)}H${STAIR_X + STEP_W * (k + 1)}`).join("")}V${GROUND}Z`;
+  const hops = [0, 1, 2].map(k => `M${92 + STEP_W * k} ${treadTop(k)}Q${114 + STEP_W * k} ${treadTop(k + 1) - 26} ${136 + STEP_W * k} ${treadTop(k + 1)}`);
+  const summit = { x: STAIR_X + STEP_W * 3, y: treadTop(3) };
+  const summitBox = `M${summit.x} ${summit.y}h${STEP_W}V${GROUND}H${summit.x}Z`;
+  return (
+    <Sheet id="v-stairs" guides={<>
+      <path className={m(styles.draw)} d={`M30 ${GROUND}H290`} pathLength={1} style={at(.2)} />
+      <path className={m(styles.draw, styles.ray)} d="M40 171.1L290 12" pathLength={1} style={at(.9)} />
+    </>}>
+      <clipPath id="v-stairs-summit"><path d={summitBox} /></clipPath>
+      <path className={m(styles.fadeIn, styles.summitFill)} d={summitBox} fill="url(#v-stairs-gold)" style={{ animationDelay: "2s, 2.4s" }} />
+      <path className={m(styles.draw, styles.hatch)} d={hatch(summit.x, summit.y, summit.x + STEP_W, GROUND)} clipPath="url(#v-stairs-summit)" pathLength={1} style={at(1.8)} />
+      <path className={m(styles.draw, styles.ink)} d={profile} pathLength={1} style={at(.4)} />
+      <path className={m(styles.draw, styles.lensLine)} d={summitBox} pathLength={1} style={at(1.6)} />
+      {hops.map((d, k) => <path key={k} className={m(styles.draw, styles.hopPath)} d={d} pathLength={1} style={at(1.3 + k * .15)} />)}
+      {[{ dx: -7, fill: "var(--ink)", lift: 14, delay: 2.4 }, { dx: 7, fill: "url(#v-stairs-gold)", lift: 9, delay: 2.62 }].map(({ dx, fill, lift, delay }) => (
+        <g key={dx} className={m(styles.hopX)} style={at(delay)}>
+          <g className={m(styles.hopY)} style={{ ...at(delay), "--lift": `${lift}px` } as CSSProperties}><circle cx={92 + dx} cy={treadTop(0) - 5} r="4.5" fill={fill} /></g>
         </g>
       ))}
-      {climbers.map(({ x, fill, lift, delay }) => {
-        const [cx, cy] = marker(x);
-        return (
-          <g className={`${styles.motion} ${styles.climbX}`} key={x} style={{ "--delay": `${delay}s` } as CSSProperties}>
-            <g className={`${styles.motion} ${styles.climbY}`} style={{ "--lift": "0px" } as CSSProperties}><ellipse className={styles.shadow} cx={cx} cy={cy} rx="6" ry="3" /></g>
-            <g className={`${styles.motion} ${styles.climbY}`} style={{ "--lift": `${lift}px` } as CSSProperties}><circle cx={cx} cy={cy - 7} r="5" fill={fill} /></g>
-          </g>
-        );
-      })}
-    </svg>
+    </Sheet>
   );
 }
 
+const TILE = 34, TILE_GAP = 10, TILES_X = 99, TILES_Y = 49;
+const tilePath = (r: number, c: number) => `M${TILES_X + c * (TILE + TILE_GAP)} ${TILES_Y + r * (TILE + TILE_GAP)}h${TILE}v${TILE}h-${TILE}Z`;
+
+// 02: a 3x3 batch in plan. A compass singles out the centre tile, which lifts out of its slot while the rest recede.
 function BespokeArtwork() {
-  const { box, face } = projector(160, 58);
-  const tile = (r: number, c: number) => box(c * 40, r * 40, 30, 30, 5);
-  // ponytail: no depth sort, resting tiles never overlap; the lifted one is drawn last.
   const batch = [0, 1, 2].flatMap(r => [0, 1, 2].map(c => ({ r, c }))).filter(({ r, c }) => r !== 1 || c !== 1);
-  const chosen = tile(1, 1);
-  // Entry wave runs from the front row (r + c = 4, bottom of the drawing) to the back.
-  const riseDelay = (depth: number) => ({ animationDelay: `${(4 - depth) * 80}ms` });
+  const chosen = tilePath(1, 1);
   return (
-    <svg viewBox="0 0 320 220" aria-hidden="true">
-      <BrandGradient id="values-bespoke" />
-      <path className={`${styles.motion} ${styles.slot}`} d={face([40, 40], [70, 40], [70, 70], [40, 70])} />
-      <g className={`${styles.motion} ${styles.recede}`}>{batch.map(({ r, c }) => <g className={`${styles.motion} ${styles.rise}`} key={`${r}-${c}`} style={riseDelay(r + c)}><Box faces={tile(r, c)} /></g>)}</g>
-      <g className={`${styles.motion} ${styles.lift}`}>
-        <g className={`${styles.motion} ${styles.rise}`} style={riseDelay(2)}><Box faces={chosen} /></g>
-        <g className={`${styles.motion} ${styles.paint}`}><path className={styles.edge} d={chosen.front} fill="#C93F0A" /><path className={styles.edge} d={chosen.right} fill="#E2530F" /><path className={styles.edge} d={chosen.top} fill="url(#values-bespoke)" /></g>
+    <Sheet id="v-tiles" guides={<>
+      <path className={m(styles.draw)} d="M89 39L231 181" pathLength={1} style={at(.6)} />
+      <path className={m(styles.draw)} d="M231 39L89 181" pathLength={1} style={at(.75)} />
+    </>}>
+      <clipPath id="v-tiles-chosen"><path d={chosen} /></clipPath>
+      <path className={m(styles.ghost)} d={chosen} style={at(2.8)} />
+      <g className={m(styles.recede)} style={at(2.8)}>
+        {batch.map(({ r, c }) => <path key={`${r}${c}`} className={m(styles.draw, styles.tile)} d={tilePath(r, c)} pathLength={1} style={at(.3 + (r + c) * .08)} />)}
       </g>
-    </svg>
+      <circle className={m(styles.draw, styles.compassRing)} cx="160" cy="110" r="32" pathLength={1} style={at(1)} />
+      <g className={m(styles.arm)} style={{ "--d": "1s", transformOrigin: "160px 110px" } as CSSProperties}><path d="M160 110H192" /><circle cx="192" cy="110" r="2.2" /></g>
+      <g className={m(styles.float)} style={at(2.8)}>
+        <path className={m(styles.fadeIn, styles.tileFill)} d={chosen} fill="url(#v-tiles-gold)" style={at(2)} />
+        <path className={m(styles.draw, styles.hatch)} d={hatch(143, 93, 177, 127, 5)} clipPath="url(#v-tiles-chosen)" pathLength={1} style={at(1.8)} />
+        <path className={m(styles.draw, styles.lensLine)} d={chosen} pathLength={1} style={at(1.6)} />
+      </g>
+    </Sheet>
   );
 }
 
-function Platform({ cx, cy, children }: { cx: number; cy: number; children?: ReactNode }) {
-  const rx = 30, ry = 15, h = 8;
-  return <g><path className={styles.front} d={`M${cx - rx} ${cy - h}V${cy}A${rx} ${ry} 0 0 0 ${cx + rx} ${cy}V${cy - h}Z`} /><ellipse className={styles.top} cx={cx} cy={cy - h} rx={rx} ry={ry} />{children}</g>;
-}
-
-const ROUTE = "M96 124C104 48 214 30 224 92";
+// 03: TLV to NYC. The route is an arc struck from a compass centre below the drawing; a traveler crosses it on a loop.
+const TLV = [92, 150] as const, NYC = [232, 106] as const, ROUTE_R = 110, ROUTE_C = [186.5, 206.1] as const;
+const ROUTE = `M${TLV[0]} ${TLV[1]}A${ROUTE_R} ${ROUTE_R} 0 0 1 ${NYC[0]} ${NYC[1]}`;
 
 function GlobalArtwork() {
+  const [cx, cy] = ROUTE_C;
   return (
-    <svg viewBox="0 0 320 220" aria-hidden="true">
-      <BrandGradient id="values-global" />
-      <path className={styles.guide} d="M96 136 224 104" />
-      <Platform cx={96} cy={136}><circle cx="96" cy="128" r="4" fill="var(--ink)" /></Platform>
-      <Platform cx={224} cy={104}><ellipse className={`${styles.motion} ${styles.arrive}`} cx="224" cy="96" rx="22" ry="11" /><circle cx="224" cy="96" r="4" fill="url(#values-global)" /></Platform>
-      <path className={styles.route} d={ROUTE} />
-      <path className={`${styles.motion} ${styles.traveler}`} d={ROUTE} pathLength="1" />
-      <g className={styles.locations}><text x="96" y="168" textAnchor="middle">TLV</text><text x="224" y="136" textAnchor="middle">NYC</text></g>
-    </svg>
+    <Sheet id="v-global" guides={<>
+      <circle className={m(styles.draw, styles.ray)} cx={cx} cy={cy} r={ROUTE_R} pathLength={1} style={at(.5)} />
+      <path className={m(styles.draw)} d={`M${cx} ${cy}L${TLV[0]} ${TLV[1]}M${cx} ${cy}L${NYC[0]} ${NYC[1]}`} pathLength={1} style={at(.9)} />
+      <path className={m(styles.pop)} d={cross(cx, cy)} style={{ ...at(.7), transformOrigin: `${cx}px ${cy}px` }} />
+    </>}>
+      <clipPath id="v-global-nyc"><circle cx={NYC[0]} cy={NYC[1]} r="20" /></clipPath>
+      <circle className={m(styles.fadeIn, styles.tileFill)} cx={NYC[0]} cy={NYC[1]} r="20" fill="url(#v-global-gold)" style={at(2.1)} />
+      <path className={m(styles.draw, styles.hatch)} d={hatch(212, 86, 252, 126, 5)} clipPath="url(#v-global-nyc)" pathLength={1} style={at(1.9)} />
+      <circle className={m(styles.draw, styles.ink)} cx={TLV[0]} cy={TLV[1]} r="20" pathLength={1} style={at(.3)} />
+      <circle className={m(styles.draw, styles.lensLine)} cx={NYC[0]} cy={NYC[1]} r="20" pathLength={1} style={at(1.7)} />
+      <circle className={m(styles.pop)} cx={TLV[0]} cy={TLV[1]} r="3" fill="var(--ink)" style={{ ...at(.6), transformOrigin: `${TLV[0]}px ${TLV[1]}px` }} />
+      <circle className={m(styles.pop)} cx={NYC[0]} cy={NYC[1]} r="3" fill="var(--orange)" style={{ ...at(1.9), transformOrigin: `${NYC[0]}px ${NYC[1]}px` }} />
+      <path className={m(styles.draw, styles.lensLine, styles.routeLine)} d={ROUTE} pathLength={1} style={at(1.1)} />
+      <g className={m(styles.sweep)} style={{ "--d": "1.1s", "--sweep": "83.7deg", transformOrigin: `${cx}px ${cy}px` } as CSSProperties}>
+        <path d={`M${cx} ${cy}L${TLV[0]} ${TLV[1]}`} /><circle cx={TLV[0]} cy={TLV[1]} r="2.2" />
+      </g>
+      <circle className={m(styles.arrive)} cx={NYC[0]} cy={NYC[1]} r="20" style={at(2.8)} />
+      <path className={m(styles.traveler)} d={ROUTE} pathLength={1} style={at(2.8)} />
+      <g className={styles.heroLabels}>
+        <text className={m(styles.rise)} x={TLV[0]} y={TLV[1] + 40} textAnchor="middle" style={at(1)}>Tel Aviv</text>
+        <text className={m(styles.rise)} x={NYC[0]} y={NYC[1] + 40} textAnchor="middle" style={at(2.1)}>New York</text>
+      </g>
+    </Sheet>
   );
 }
 

@@ -7,26 +7,6 @@
 .copy small { display: block; margin-bottom: 12px; color: var(--orange); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .copy h3 { font-size: clamp(22px, 1.8vw, 26px); letter-spacing: -.025em; line-height: 1.2; }
 .copy p { margin-top: 12px; max-width: 38ch; color: var(--muted); font-size: 15px; line-height: 1.6; }
-/* Same ink stroke as the Team hero drawing (1.3, round joins). */
-.top, .right, .front, .edge { stroke: var(--ink); stroke-width: 1.3; stroke-linejoin: round; }
-.top { fill: #fff; }
-.right { fill: #E9E3DA; }
-.front { fill: #DCD5CB; }
-.shadow { fill: var(--ink); opacity: .12; }
-.guide { fill: none; stroke: var(--ink); stroke-width: 1; stroke-dasharray: 3 6; opacity: .22; }
-.route { fill: none; stroke: var(--orange); stroke-width: 1.25; opacity: .35; }
-.traveler { fill: none; stroke: var(--orange); stroke-width: 7; stroke-linecap: round; stroke-dasharray: .001 .999; animation: cross-market 5s cubic-bezier(.35, 0, .25, 1) infinite; }
-.locations { fill: var(--muted); font-family: var(--font-manrope), sans-serif; font-size: 10px; letter-spacing: 1.5px; }
-/* Steps rise from the floor once, front to back; the climb loop starts after them (--entry). */
-.rise { animation: rise .75s cubic-bezier(.2, .7, .3, 1) both; }
-.climbX, .climbY, .summit { --entry: .9s; animation-delay: calc(var(--entry) + var(--delay, 0s)); animation-fill-mode: both; }
-.climbX { animation-name: climb-x; animation-duration: 7s; animation-timing-function: cubic-bezier(.45, 0, .55, 1); animation-iteration-count: infinite; }
-.climbY { animation-name: climb-y; animation-duration: 7s; animation-iteration-count: infinite; }
-.summit { opacity: 0; animation-name: summit; animation-duration: 7s; animation-timing-function: ease-in-out; animation-iteration-count: infinite; }
-.slot { fill: var(--ink); opacity: 0; transform-box: fill-box; transform-origin: center; animation: slot 6s cubic-bezier(.65, 0, .35, 1) infinite; }
-.recede { animation: recede 6s cubic-bezier(.65, 0, .35, 1) infinite; }
-.lift { animation: lift 6s cubic-bezier(.65, 0, .35, 1) infinite; }
-.paint { opacity: 0; animation: paint 6s cubic-bezier(.65, 0, .35, 1) infinite; }
 /* Team hero: a construction drawing. Lines are drawn in with pathLength=1 dashes; the compass arm sweeps each circle in step with it.
    Phases overlap and use long ease-in-out curves so it reads as one continuous drawing, not a sequence of steps. */
 .heroArt { --ease-draw: cubic-bezier(.65, 0, .35, 1); --ease-out: cubic-bezier(.22, 1, .36, 1); width: 100%; max-width: 480px; margin: 0 0 clamp(16px, 2vw, 28px) -24px; }
@@ -62,33 +42,45 @@
 @keyframes ripple { 0% { transform: scale(1); opacity: .6; } 25%, 100% { transform: scale(4); opacity: 0; } }
 @keyframes breathe { 0%, 100% { fill-opacity: 1; } 50% { fill-opacity: .55; } }
 @media (max-width: 700px) { .heroArt { max-width: none; margin-left: 0; } }
-@media (prefers-reduced-motion: reduce) {
-  .draw { stroke-dashoffset: 0; }
-  .arm, .ripple { display: none; }
-}
-.slot, .recede, .lift, .paint { animation-delay: .9s; animation-fill-mode: both; }
-.arrive { fill: none; stroke: var(--orange); stroke-width: 1.25; opacity: 0; transform-box: fill-box; transform-origin: center; animation: arrive 5s ease-out infinite; }
+/* Value cards share the hero's drawing vocabulary; their loops start once the entry drawing has settled. */
+.stage { --ease-draw: cubic-bezier(.65, 0, .35, 1); --ease-out: cubic-bezier(.22, 1, .36, 1); }
+.stage .heroGrid { opacity: .12; }
 .stage .motion { animation-play-state: paused; }
 .stage[data-animating="true"] .motion { animation-play-state: running; }
-@keyframes rise { 0% { transform: translateY(26px); opacity: 0; } 30% { opacity: 1; } 62% { transform: translateY(-3px); } 82% { transform: translateY(.75px); } 100% { transform: translateY(0); opacity: 1; } }
+.ink { stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
+.tile { stroke: var(--ink); stroke-width: 1.1; animation-duration: 1.2s; }
+.hopPath { stroke: var(--orange); stroke-width: .8; stroke-dasharray: 1 1; opacity: .5; animation-duration: .9s; }
+.compassRing { stroke: var(--ink); stroke-width: .8; opacity: .55; animation-duration: 1.6s; }
+.routeLine { animation-duration: 1.6s; }
+.summitFill { opacity: .22; stroke: none; animation: fade-in 1.2s ease-out both, summit-glow 7s ease-in-out infinite; }
+.tileFill { opacity: .22; stroke: none; }
+.hopX { animation: hop-x 7s cubic-bezier(.45, 0, .55, 1) infinite both; }
+.hopY { animation: hop-y 7s infinite both; }
+.float { animation: float 6s cubic-bezier(.65, 0, .35, 1) infinite both; }
+.recede { animation: recede 6s cubic-bezier(.65, 0, .35, 1) infinite both; }
+.ghost { fill: none; stroke: var(--ink); stroke-width: 1; stroke-dasharray: 3 3; opacity: 0; animation: ghost 6s cubic-bezier(.65, 0, .35, 1) infinite both; }
+.sweep { stroke: var(--orange); stroke-width: 1; transform-box: view-box; animation: sweep 1.6s var(--d) var(--ease-draw) both, vanish .6s calc(var(--d) + 1.5s) ease forwards; }
+.sweep circle { fill: var(--orange); stroke: none; }
+.traveler { fill: none; stroke: var(--orange); stroke-width: 7; stroke-linecap: round; stroke-dasharray: .001 .999; animation: cross-market 5s cubic-bezier(.35, 0, .25, 1) infinite both; }
+.arrive { fill: none; stroke: var(--orange); stroke-width: 1.25; opacity: 0; transform-box: fill-box; transform-origin: center; animation: arrive 5s ease-out infinite both; }
+@keyframes hop-x { 0% { transform: translateX(0); opacity: 0; } 6%, 12% { transform: translateX(0); opacity: 1; } 22%, 32% { transform: translateX(44px); } 42%, 52% { transform: translateX(88px); } 62%, 84% { transform: translateX(132px); opacity: 1; } 92%, 100% { transform: translateX(132px); opacity: 0; } }
 /* A hop is split into X (eased across) and Y (ease-out to the apex, ease-in to land), which traces an arc. */
-@keyframes climb-x { 0% { transform: translateX(0); opacity: 0; } 6%, 12% { transform: translateX(0); opacity: 1; } 22%, 32% { transform: translateX(22px); } 42%, 52% { transform: translateX(44px); } 62%, 84% { transform: translateX(66px); opacity: 1; } 92%, 100% { transform: translateX(66px); opacity: 0; } }
-@keyframes climb-y {
+@keyframes hop-y {
   0%, 12%, 22%, 32%, 42%, 52% { animation-timing-function: cubic-bezier(.3, .7, .5, 1); }
   17%, 37%, 57% { animation-timing-function: cubic-bezier(.5, 0, .7, .3); }
   0%, 12% { transform: translateY(0); }
-  17% { transform: translateY(calc(-29px - var(--lift))); }
-  22%, 32% { transform: translateY(-29px); }
-  37% { transform: translateY(calc(-58px - var(--lift))); }
-  42%, 52% { transform: translateY(-58px); }
-  57% { transform: translateY(calc(-87px - var(--lift))); }
-  62%, 100% { transform: translateY(-87px); }
+  17% { transform: translateY(calc(-28px - var(--lift))); }
+  22%, 32% { transform: translateY(-28px); }
+  37% { transform: translateY(calc(-56px - var(--lift))); }
+  42%, 52% { transform: translateY(-56px); }
+  57% { transform: translateY(calc(-84px - var(--lift))); }
+  62%, 100% { transform: translateY(-84px); }
 }
-@keyframes summit { 0%, 60%, 92%, 100% { opacity: 0; } 66%, 84% { opacity: .28; } }
-@keyframes slot { 0%, 14%, 90%, 100% { opacity: 0; transform: scale(1); } 34%, 70% { opacity: .1; transform: scale(.85); } }
-@keyframes recede { 0%, 14%, 90%, 100% { opacity: 1; } 34%, 70% { opacity: .45; } }
-@keyframes lift { 0%, 14%, 90%, 100% { transform: translateY(0); } 34%, 70% { transform: translateY(-30px); } 52% { transform: translateY(-34px); } }
-@keyframes paint { 0%, 18%, 86%, 100% { opacity: 0; } 34%, 70% { opacity: 1; } }
+@keyframes summit-glow { 0%, 60%, 92%, 100% { opacity: .22; } 66%, 84% { opacity: .5; } }
+@keyframes float { 0%, 14%, 90%, 100% { transform: translateY(0); } 34%, 70% { transform: translateY(-14px); } 52% { transform: translateY(-16px); } }
+@keyframes recede { 0%, 14%, 90%, 100% { opacity: 1; } 34%, 70% { opacity: .4; } }
+@keyframes ghost { 0%, 14%, 90%, 100% { opacity: 0; } 34%, 70% { opacity: .55; } }
+@keyframes sweep { 0% { transform: rotate(0); opacity: 0; } 8% { opacity: 1; } 100% { transform: rotate(var(--sweep)); opacity: 1; } }
 @keyframes arrive { 0%, 72% { opacity: 0; transform: scale(.6); } 76% { opacity: .7; } 100% { opacity: 0; transform: scale(1.7); } }
 @keyframes cross-market { 0%, 12% { stroke-dashoffset: 0; opacity: 0; } 18% { opacity: 1; } 75% { stroke-dashoffset: -1; opacity: 1; } 85%, 100% { stroke-dashoffset: -1; opacity: 0; } }
 @media (min-width: 701px) and (max-width: 1100px) {
@@ -103,13 +95,10 @@
   .copy { padding: 8px 24px 28px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .stage .motion { animation: none; }
-  .climbX { transform: translateX(66px); }
-  .climbY { transform: translateY(-87px); }
-  .summit { opacity: .28; }
-  .lift { transform: translateY(-30px); }
-  .paint { opacity: 1; }
-  .recede { opacity: .45; }
-  .slot { opacity: .1; }
-  .traveler, .arrive { opacity: 0; }
+  .draw { stroke-dashoffset: 0; }
+  .arm, .sweep, .ripple, .traveler, .arrive { display: none; }
+  .hopX { transform: translateX(132px); }
+  .hopY { transform: translateY(-84px); }
+  .float { transform: translateY(-14px); }
+  .ghost { opacity: .55; }
 }
