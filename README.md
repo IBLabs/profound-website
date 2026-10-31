@@ -34,3 +34,21 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Remote development preview
+
+Next.js restricts development JavaScript requests from external hostnames. When exposing this dev server with ngrok, restart it with the exact tunnel hostname:
+
+```sh
+NGROK_DOMAIN=your-tunnel.ngrok-free.app npm run dev
+```
+
+Keep `ngrok http 3000` running separately. Avoid allowing all external origins. A page can return HTTP 200 while its JavaScript is rejected, leaving animation-driven content hidden.
+
+Verify all routes and the Origin-bearing script requests used by Safari:
+
+```sh
+npm run check:preview -- https://your-tunnel.ngrok-free.app
+```
+
+Reveal animations must explicitly resolve to their visible state when reduced motion is enabled. Check the public preview in mobile WebKit with both motion settings when changing entrance/reveal behavior.

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Iris, AI personal assistant">
+  <defs>
+    <radialGradient id="iris-bg" cx="50%" cy="50%" r="80%">
+      <stop offset="0%" stop-color="#3a2008"/>
+      <stop offset="60%" stop-color="#180c04"/>
+      <stop offset="100%" stop-color="#0a0502"/>
+    </radialGradient>
+    <radialGradient id="iris-core" cx="42%" cy="42%" r="60%">
+      <stop offset="0%" stop-color="#fff5e6"/>
+      <stop offset="35%" stop-color="#ffb066"/>
+      <stop offset="80%" stop-color="#e64500"/>
+      <stop offset="100%" stop-color="#b54200"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="400" height="400" fill="url(#iris-bg)"/>
+
+  <!-- outer faint ring -->
+  <circle cx="200" cy="200" r="172" fill="none" stroke="#ff5a1a" stroke-width="1" opacity="0.28"/>
+
+  <!-- iris rings -->
+  <circle cx="200" cy="200" r="142" fill="none" stroke="#e64500" stroke-width="1.5" opacity="0.55"/>
+  <circle cx="200" cy="200" r="118" fill="#ff5a1a" opacity="0.16"/>
+  <circle cx="200" cy="200" r="96" fill="none" stroke="#ffb066" stroke-width="1" opacity="0.6"/>
+
+  <!-- iris core (warm orange gradient) -->
+  <circle cx="200" cy="200" r="78" fill="url(#iris-core)"/>
+
+  <!-- iris striations -->
+  <g stroke="#fff5e6" stroke-width="1" opacity="0.35" fill="none" stroke-linecap="round">
+    <line x1="200" y1="128" x2="200" y2="158"/>
+    <line x1="200" y1="242" x2="200" y2="272"/>
+    <line x1="128" y1="200" x2="158" y2="200"/>
+    <line x1="242" y1="200" x2="272" y2="200"/>
+    <line x1="148" y1="148" x2="170" y2="170"/>
+    <line x1="252" y1="148" x2="230" y2="170"/>
+    <line x1="148" y1="252" x2="170" y2="230"/>
+    <line x1="252" y1="252" x2="230" y2="230"/>
+  </g>
+
+  <!-- pupil -->
+  <circle cx="200" cy="200" r="26" fill="#0a0502"/>
+
+  <!-- specular highlights -->
+  <circle cx="186" cy="186" r="7" fill="#fff5e6" opacity="0.92"/>
+  <circle cx="216" cy="216" r="2.5" fill="#fff5e6" opacity="0.55"/>
+
+  <!-- orbiting dots (assistant-as-orchestrator) -->
+  <g>
+    <circle cx="200" cy="48" r="4" fill="#ffd9a8"/>
+    <circle cx="352" cy="200" r="3" fill="#ff5a1a" opacity="0.8"/>
+    <circle cx="200" cy="352" r="3" fill="#ffb066" opacity="0.65"/>
+    <circle cx="48" cy="200" r="2.5" fill="#ff5a1a" opacity="0.6"/>
+  </g>
+
+  <!-- corner ticks -->
+  <g stroke="#ff5a1a" stroke-width="1.2" opacity="0.4">
+    <line x1="200" y1="14" x2="200" y2="28"/>
+    <line x1="200" y1="372" x2="200" y2="386"/>
+    <line x1="14" y1="200" x2="28" y2="200"/>
+    <line x1="372" y1="200" x2="386" y2="200"/>
+  </g>
+</svg>
