@@ -2,54 +2,51 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import styles from "./site-header.module.css";
+
+const pages = [
+  { label: "Home", href: "/" },
+  { label: "Studio", href: "/studio" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "Team", href: "/team" },
+];
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const menuRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const scroll = () => setScrolled(window.scrollY > 8);
+    scroll();
+    window.addEventListener("scroll", scroll, { passive: true });
+    return () => window.removeEventListener("scroll", scroll);
+  }, []);
 
   return (
-    <header className="site-header-nav">
-      <nav className="site-nav-shell" aria-label="Primary navigation">
-        <Link href="/" aria-label="ProFound Home" className="hero-wordmark">
-          <Image
-            alt="ProFound"
-            className="brand-logo brand-logo--header"
-            height={30}
-            priority
-            src="/figma/profound-logo-dark.svg"
-            width={120}
-          />
+    <header className={`${styles.header}${scrolled ? ` ${styles.scrolled}` : ""}`} onKeyDown={event => {
+      if (event.key === "Escape" && menuOpen) {
+        setMenuOpen(false);
+        menuRef.current?.focus();
+      }
+    }}>
+      <div className={styles.shell}>
+        <Link href="/" aria-label="Profound Ventures, home" onClick={() => setMenuOpen(false)}>
+          <Image className={styles.logo} src="/figma/profound-reference-logo.svg" alt="" width={114} height={26} priority />
         </Link>
-        <div className="hero-nav-links">
-          <Link
-            href="/"
-            aria-current={pathname === "/" ? "page" : undefined}
-          >
-            Home
-          </Link>
-          <Link
-            href="/studio"
-            aria-current={pathname === "/studio" ? "page" : undefined}
-          >
-            Studio
-          </Link>
-          <Link
-            href="/portfolio"
-            aria-current={pathname === "/portfolio" ? "page" : undefined}
-          >
-            Legacy Portfolio
-          </Link>
-          <Link
-            href="/team"
-            aria-current={pathname === "/team" ? "page" : undefined}
-          >
-            Team
-          </Link>
-        </div>
-        <a className="pitch-button hero-pitch" href="mailto:hello@profound.vc">
-          Pitch us
-        </a>
-      </nav>
+        <nav id="site-navigation" className={`${styles.nav}${menuOpen ? ` ${styles.open}` : ""}`} aria-label="Main">
+          {pages.map(page => (
+            <Link key={page.href} href={page.href} aria-current={pathname === page.href ? "page" : undefined} onClick={() => setMenuOpen(false)}>{page.label}</Link>
+          ))}
+          <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
+        </nav>
+        <button ref={menuRef} className={styles.menu} type="button" aria-expanded={menuOpen} aria-controls="site-navigation" onClick={() => setMenuOpen(!menuOpen)}>
+          Menu <i aria-hidden="true" />
+        </button>
+      </div>
     </header>
   );
 }

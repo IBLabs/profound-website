@@ -1,0 +1,44 @@
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.card { min-width: 0; background: var(--surface-warm); border: 1px solid var(--line); border-radius: var(--radius-card); overflow: hidden; }
+.stage { display: grid; place-items: center; height: clamp(200px, 19vw, 248px); padding: 16px 20px 0; }
+.stage svg { display: block; width: 100%; max-width: 320px; height: 100%; overflow: visible; }
+.stage svg * { vector-effect: non-scaling-stroke; }
+.copy { padding: 12px clamp(22px, 2.2vw, 32px) 30px; }
+.copy small { display: block; margin-bottom: 12px; color: var(--orange); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.copy h3 { font-size: clamp(22px, 1.8vw, 26px); letter-spacing: -.025em; line-height: 1.2; }
+.copy p { margin-top: 12px; max-width: 38ch; color: var(--muted); font-size: 15px; line-height: 1.6; }
+.line { fill: none; stroke: var(--ink); stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
+.guide { fill: none; stroke: var(--ink); stroke-width: 1; stroke-dasharray: 3 6; opacity: .22; }
+.secondary { fill: none; stroke: var(--ink); stroke-width: 1; opacity: .18; }
+.focusCard { fill: #fff; stroke: var(--ink); stroke-width: 1.25; }
+.focusBrackets { fill: none; stroke: var(--orange); stroke-width: 1.25; transform-origin: 160px 109px; animation: focus-lock 5.5s ease-in-out infinite; }
+.focusPulse { transform-origin: 160px 96px; animation: focus-breathe 5.5s ease-in-out infinite; }
+.flag { transform-origin: 162px 46px; animation: flag-settle 6s ease-in-out infinite; }
+.orbit { animation: orbit-drift 36s linear infinite; }
+.anchorPulse { transform-origin: 160px 174px; animation: anchor-pulse 6s ease-out infinite; }
+.route { fill: none; stroke: var(--orange); stroke-width: 1.25; opacity: .35; }
+.traveler { fill: none; stroke: var(--orange); stroke-width: 7; stroke-linecap: round; stroke-dasharray: .001 .999; animation: cross-market 5s cubic-bezier(.35, 0, .25, 1) infinite; }
+.locations { fill: var(--muted); font-family: var(--font-manrope), sans-serif; font-size: 10px; letter-spacing: 1.5px; }
+.stage .motion { animation-play-state: paused; }
+.stage[data-animating="true"] .motion { animation-play-state: running; }
+@keyframes flag-settle { 0%, 35%, 100% { transform: skewY(0deg) scaleX(1); } 12% { transform: skewY(-3deg) scaleX(.95); } 23% { transform: skewY(1deg) scaleX(1); } }
+@keyframes orbit-drift { to { stroke-dashoffset: -180; } }
+@keyframes anchor-pulse { 0%, 60%, 100% { transform: scale(.7); opacity: 0; } 15% { opacity: .45; } 45% { transform: scale(1.65); opacity: 0; } }
+@keyframes focus-lock { 0%, 55%, 100% { transform: scale(1); opacity: .7; } 20%, 35% { transform: scale(.96); opacity: 1; } }
+@keyframes focus-breathe { 0%, 55%, 100% { transform: scale(.9); opacity: .08; } 20%, 35% { transform: scale(1.12); opacity: .18; } }
+@keyframes cross-market { 0%, 12% { stroke-dashoffset: 0; opacity: 0; } 18% { opacity: 1; } 75% { stroke-dashoffset: -1; opacity: 1; } 85%, 100% { stroke-dashoffset: -1; opacity: 0; } }
+@media (min-width: 701px) and (max-width: 1100px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .card { display: grid; grid-template-columns: minmax(240px, .85fr) minmax(0, 1fr); align-items: center; }
+  .stage { height: 230px; padding: 12px 24px; }
+  .copy { padding: 28px; }
+}
+@media (max-width: 700px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .stage { height: 220px; }
+  .copy { padding: 8px 24px 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage .motion { animation: none; }
+  .traveler { opacity: 0; }
+}

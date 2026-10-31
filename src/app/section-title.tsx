@@ -11,10 +11,11 @@ export function SectionTitle({ children, className, ...props }: SectionTitleProp
     <motion.h2
       {...props}
       className={["section-title--reveal", className].filter(Boolean).join(" ")}
-      initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 16 }}
+      animate={reduceMotion ? { opacity: 1, y: 0 } : undefined}
       whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
       viewport={{ amount: 0.2, once: true }}
-      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] as const }}
+      transition={{ duration: reduceMotion ? 0 : 0.65, ease: [0.22, 1, 0.36, 1] as const }}
     >
       {children}
     </motion.h2>

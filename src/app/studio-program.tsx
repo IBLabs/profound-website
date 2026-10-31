@@ -63,6 +63,19 @@ const itemVariants: Variants = {
   },
 };
 
+const reducedContainerVariants: Variants = {
+  hidden: containerVariants.hidden,
+  visible: {
+    opacity: 1,
+    transition: { duration: 0, staggerChildren: 0, delayChildren: 0 },
+  },
+};
+
+const reducedItemVariants: Variants = {
+  hidden: itemVariants.hidden,
+  visible: { opacity: 1, y: 0, transition: { duration: 0 } },
+};
+
 export function StudioProgram() {
   const reduceMotion = useReducedMotion();
 
@@ -70,10 +83,11 @@ export function StudioProgram() {
     <div className="studio-program-shell section-shell">
       <motion.div
         className="studio-program-track"
-        initial={reduceMotion ? false : "hidden"}
+        initial="hidden"
+        animate={reduceMotion ? "visible" : undefined}
         whileInView={reduceMotion ? undefined : "visible"}
         viewport={{ amount: 0.2, once: true }}
-        variants={containerVariants}
+        variants={reduceMotion ? reducedContainerVariants : containerVariants}
       >
         {milestones.map((milestone, index) => {
           const isLast = index === milestones.length - 1;
@@ -81,7 +95,7 @@ export function StudioProgram() {
             <motion.article
               key={milestone.code}
               className="studio-milestone"
-              variants={itemVariants}
+              variants={reduceMotion ? reducedItemVariants : itemVariants}
             >
               {/* Milestone Eyebrow Tag */}
               <div className="studio-milestone-tag">

@@ -163,10 +163,10 @@ export function CommitmentSection() {
                 id={`pillar-panel-${pillars[activeIndex].num}`}
                 role="tabpanel"
                 aria-labelledby={`pillar-tab-${pillars[activeIndex].num}`}
-                initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-                animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
                 exit={reduceMotion ? undefined : { opacity: 0, y: -10 }}
-                transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: reduceMotion ? 0 : 0.38, ease: [0.22, 1, 0.36, 1] }}
                 className="commitment-stage-grid"
               >
                 {/* Content */}

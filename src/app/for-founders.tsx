@@ -36,7 +36,7 @@ export function ForFounders() {
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 16 },
+    hidden: { opacity: 0, y: 16 },
     visible: {
       opacity: 1,
       y: 0,
@@ -60,7 +60,8 @@ export function ForFounders() {
         <motion.div
           className="for-founders-eyebrow-wrap"
           initial="hidden"
-          whileInView="visible"
+          animate={shouldReduceMotion ? "visible" : undefined}
+          whileInView={shouldReduceMotion ? undefined : "visible"}
           viewport={{ once: true, margin: "-60px" }}
           variants={containerVariants}
         >
@@ -74,7 +75,8 @@ export function ForFounders() {
           <motion.div
             className="for-founders-left"
             initial="hidden"
-            whileInView="visible"
+            animate={shouldReduceMotion ? "visible" : undefined}
+            whileInView={shouldReduceMotion ? undefined : "visible"}
             viewport={{ once: true, margin: "-60px" }}
             variants={containerVariants}
           >
@@ -98,7 +100,8 @@ export function ForFounders() {
           <motion.div
             className="for-founders-right"
             initial="hidden"
-            whileInView="visible"
+            animate={shouldReduceMotion ? "visible" : undefined}
+            whileInView={shouldReduceMotion ? undefined : "visible"}
             viewport={{ once: true, margin: "-60px" }}
             variants={containerVariants}
           >

@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Libre_Baskerville, Manrope, Space_Grotesk } from "next/font/google";
+import { Google_Sans, Libre_Baskerville, Fraunces, Manrope } from "next/font/google";
 import "./globals.css";
+
+const referenceSans = Google_Sans({
+  variable: "--font-team-sans",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  adjustFontFallback: false,
+});
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -14,16 +21,11 @@ const libreBaskerville = Libre_Baskerville({
   style: ["normal", "italic"],
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const accent = Fraunces({
+  variable: "--font-accent",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: "400",
+  style: "italic",
 });
 
 import { SiteHeader } from "./site-header";
@@ -38,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${manrope.variable} ${libreBaskerville.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${manrope.variable} ${referenceSans.variable} ${libreBaskerville.variable} ${accent.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <SiteHeader />

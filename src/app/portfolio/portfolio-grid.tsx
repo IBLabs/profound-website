@@ -355,9 +355,7 @@ export function PortfolioGrid() {
                 key={company.name}
                 layout
                 initial={
-                  shouldReduceMotion
-                    ? false
-                    : hasEntered
+                  hasEntered
                     ? { opacity: 0, scale: 0.96 }
                     : { opacity: 0, y: 18 }
                 }
