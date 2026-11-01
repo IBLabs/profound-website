@@ -1,0 +1,46 @@
+.program, .team { --snap: cubic-bezier(.2, .8, .2, 1); --bw: grayscale(1) contrast(.82) brightness(1.14); --warm: sepia(.14) saturate(1.1) contrast(1.04) brightness(1.03); padding-block: clamp(80px, 8vw, 128px); }
+.title { margin: 0; font-family: var(--font-libre), Georgia, serif; font-weight: 400; font-size: clamp(34px, 3.8vw, 56px); line-height: 1.08; letter-spacing: -.035em; color: var(--ink-heading); }
+.title em { color: var(--orange); }
+.program .title { text-align: center; margin-bottom: clamp(36px, 4.4vw, 64px); }
+
+/* Info panels sit flat on the page; photos are rounded, shadowed and float above them as they drift. */
+.bento { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: clamp(280px, 24vw, 340px); grid-template-areas: "a b c" "d e c" "f g h"; gap: 16px; }
+.photo, .tile { position: relative; }
+.photo { z-index: 1; overflow: hidden; border-radius: var(--radius-card); background: var(--paper-subtle); box-shadow: 0 28px 56px -24px #18181659, 0 4px 14px -6px #18181622; will-change: transform; }
+/* Taller than the frame so it can slide inside it without showing an edge. */
+.photo img { position: absolute; top: -8%; left: 0; width: 100%; height: 116%; object-fit: cover; filter: grayscale(1) contrast(.9) brightness(1.08); }
+
+.tile { display: flex; flex-direction: column; padding: clamp(20px, 2vw, 28px); background: var(--paper); color: var(--ink); }
+.label { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--orange); }
+/* Takes whatever height is left between the label and the number; the drawing scales to fit. */
+.art { display: block; flex: 1 1 0; min-height: 0; width: 100%; padding-block: 12px; overflow: visible; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.ink { stroke: var(--ink); stroke-width: 1.4; }
+.accent { stroke: var(--orange); stroke-width: 1.8; }
+.node { fill: var(--orange); }
+.num { font-family: var(--font-libre), Georgia, serif; font-weight: 400; font-size: clamp(40px, 3.8vw, 60px); line-height: .95; letter-spacing: -.045em; }
+.num em { color: var(--orange); }
+.caption { margin: 8px 0 0; color: var(--muted); font-size: 15px; line-height: 1.45; }
+
+.teamHead { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: clamp(32px, 4vw, 52px); }
+.people { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.portrait { aspect-ratio: 3 / 4; overflow: hidden; border-radius: var(--radius-card); background: var(--paper-subtle); }
+.portrait img { width: 100%; height: 100%; object-fit: cover; filter: var(--bw); transition: filter .45s ease; }
+.person:hover img { filter: var(--warm); }
+.person h3 { margin: 16px 0 0; font-family: var(--font-libre), Georgia, serif; font-weight: 400; font-size: 22px; letter-spacing: -.015em; color: var(--ink-heading); }
+.person p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+
+/* ponytail: no hover on touch screens, so portraits show in colour there instead of colouring in on scroll. */
+@media (hover: none) { .portrait img { filter: var(--warm); } }
+
+@media (max-width: 900px) {
+  .bento { grid-template-columns: 1fr 1fr; grid-auto-rows: 300px; grid-template-areas: "a b" "c c" "d e" "f g" "h h"; }
+  .people { grid-template-columns: 1fr 1fr; gap: 28px 12px; }
+  .teamHead { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 560px) {
+  .bento { grid-template-columns: 1fr; grid-auto-rows: auto; grid-template-areas: "a" "b" "e" "c" "f" "g" "h" "d"; }
+  .photo { aspect-ratio: 4 / 3; }
+  .tile { min-height: 300px; }
+  .person h3 { font-size: 18px; margin-top: 10px; }
+  .person p { font-size: 13px; }
+}

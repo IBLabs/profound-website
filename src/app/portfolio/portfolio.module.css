@@ -1,0 +1,22 @@
+/* Grab to turn; vertical swipes still scroll the page on touch screens. */
+.scene { cursor: grab; touch-action: pan-y; user-select: none; }
+.scene:active { cursor: grabbing; }
+
+/* The 3D block: the shared .ill rule thins every stroke to 1px, so its edges are restated heavier here.
+   Wall fills keep a hairline white stroke to close seams; edges and the face outline carry the orange. */
+.block polygon { stroke-width: .6px !important; }
+.block path, .block :global(.cap) { stroke-width: 2px !important; }
+
+/* One-colour logo grid on open white, no dividers. */
+.logos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
+.logos a, .logos span { position: relative; display: grid; place-items: center; height: clamp(130px, 12vw, 180px); padding: 0 clamp(28px, 4vw, 64px); border-radius: var(--radius-card); transition: background-color .2s ease; }
+.logos img { width: auto; max-width: min(100%, 190px); max-height: 44px; opacity: .78; transition: opacity .2s ease; }
+.logos a:hover, .logos a:focus-visible { background: var(--surface-warm); }
+.logos a:hover img, .logos a:focus-visible img { opacity: 1; }
+.logos small { position: absolute; left: 16px; bottom: 12px; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--orange); }
+
+@media (max-width: 700px) {
+  .logos { grid-template-columns: 1fr 1fr; }
+  .logos a, .logos span { height: 110px; padding: 0 20px; }
+  .logos img { max-height: 32px; }
+}

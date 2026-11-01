@@ -1,16 +1,20 @@
 .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .card { min-width: 0; background: var(--surface-warm); border: 1px solid var(--line); border-radius: var(--radius-card); overflow: hidden; }
-.stage { display: grid; place-items: center; height: clamp(200px, 19vw, 248px); padding: 16px 20px 0; }
+/* No padding and a visible overflow: the sheet's grid bleeds to the card edges and under the copy; the card clips it. */
+.stage { display: grid; place-items: center; height: clamp(200px, 19vw, 248px); }
+/* ponytail: capped at 1:1 because non-scaling strokes with pathLength dashes leave gaps when scaled up; the grid still bleeds via overflow. */
 .stage svg { display: block; width: 100%; max-width: 320px; height: 100%; overflow: visible; }
 .stage svg * { vector-effect: non-scaling-stroke; }
-.copy { padding: 12px clamp(22px, 2.2vw, 32px) 30px; }
-.copy small { display: block; margin-bottom: 12px; color: var(--orange); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-.copy h3 { font-size: clamp(22px, 1.8vw, 26px); letter-spacing: -.025em; line-height: 1.2; }
-.copy p { margin-top: 12px; max-width: 38ch; color: var(--muted); font-size: 15px; line-height: 1.6; }
+.copy { display: grid; gap: 14px; align-content: center; padding: 8px clamp(24px, 2.6vw, 36px) clamp(28px, 2.8vw, 40px); }
+.copy h3 { font-size: clamp(24px, 2vw, 30px); letter-spacing: -.025em; line-height: 1.15; }
+.copy p { max-width: 36ch; color: var(--muted); font-size: 16px; line-height: 1.6; }
 /* Team hero: a construction drawing. Lines are drawn in with pathLength=1 dashes; the compass arm sweeps each circle in step with it.
    Phases overlap and use long ease-in-out curves so it reads as one continuous drawing, not a sequence of steps. */
-.heroArt { --ease-draw: cubic-bezier(.65, 0, .35, 1); --ease-out: cubic-bezier(.22, 1, .36, 1); width: 100%; max-width: 480px; margin: 0 0 clamp(16px, 2vw, 28px) -24px; }
-.heroArt svg { display: block; width: 100%; height: auto; overflow: visible; }
+.heroArt { --ease-draw: cubic-bezier(.65, 0, .35, 1); --ease-out: cubic-bezier(.22, 1, .36, 1); 
+  width: 100vw; height: clamp(320px, 36vw, 540px); margin: 0 calc(50% - 50vw) clamp(16px, 2vw, 28px); overflow: hidden;
+  -webkit-mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent); mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent); }
+/* Full-bleed and height-driven: the drawing stays centred while the ruled grid runs out to both edges of the viewport. */
+.heroArt svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .draw { fill: none; stroke-dasharray: 1 1; stroke-dashoffset: 1; animation: draw 1.6s var(--ease-draw) both; }
 .growX, .growY { fill: none; transform-box: view-box; transform-origin: 200px 150px; animation: grow-x 1.8s var(--ease-out) both; }
 .growY { animation-name: grow-y; }
@@ -41,12 +45,11 @@
 @keyframes label-rise { from { transform: translateY(6px); opacity: 0; } }
 @keyframes ripple { 0% { transform: scale(1); opacity: .6; } 25%, 100% { transform: scale(4); opacity: 0; } }
 @keyframes breathe { 0%, 100% { fill-opacity: 1; } 50% { fill-opacity: .55; } }
-@media (max-width: 700px) { .heroArt { max-width: none; margin-left: 0; } }
 /* Value cards share the hero's drawing vocabulary; their loops start once the entry drawing has settled. */
 .stage { --ease-draw: cubic-bezier(.65, 0, .35, 1); --ease-out: cubic-bezier(.22, 1, .36, 1); }
 .stage .heroGrid { opacity: .12; }
-.stage .motion { animation-play-state: paused; }
-.stage[data-animating="true"] .motion { animation-play-state: running; }
+.stage .motion, .cover .motion { animation-play-state: paused; }
+.stage[data-animating="true"] .motion, .cover[data-animating="true"] .motion { animation-play-state: running; }
 .ink { stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
 .tile { stroke: var(--ink); stroke-width: 1.1; animation-duration: 1.2s; }
 .hopPath { stroke: var(--orange); stroke-width: .8; stroke-dasharray: 1 1; opacity: .5; animation-duration: .9s; }
@@ -85,14 +88,14 @@
 @keyframes cross-market { 0%, 12% { stroke-dashoffset: 0; opacity: 0; } 18% { opacity: 1; } 75% { stroke-dashoffset: -1; opacity: 1; } 85%, 100% { stroke-dashoffset: -1; opacity: 0; } }
 @media (min-width: 701px) and (max-width: 1100px) {
   .grid { grid-template-columns: minmax(0, 1fr); }
-  .card { display: grid; grid-template-columns: minmax(240px, .85fr) minmax(0, 1fr); align-items: center; }
-  .stage { height: 230px; padding: 12px 24px; }
-  .copy { padding: 28px; }
+  .card { display: grid; grid-template-columns: minmax(260px, 1fr) minmax(0, 1fr); align-items: center; }
+  .stage { height: 230px; }
+  .copy { padding: 40px clamp(32px, 5vw, 56px) 40px 8px; }
 }
 @media (max-width: 700px) {
   .grid { grid-template-columns: minmax(0, 1fr); }
   .stage { height: 220px; }
-  .copy { padding: 8px 24px 28px; }
+  .copy { padding: 4px 24px 32px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .draw { stroke-dashoffset: 0; }

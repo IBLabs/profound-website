@@ -17,18 +17,41 @@
 .nav { display: flex; align-items: center; gap: 30px; }
 .nav a { transition: color .2s; }
 .nav a:hover, .nav a[aria-current] { color: var(--orange); }
-.menu { display: none; align-items: center; gap: 10px; height: 40px; padding: 0 4px; border: 0; background: none; font: inherit; color: inherit; cursor: pointer; }
-.menu i { position: relative; width: 18px; height: 10px; border-top: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; }
+.menu { display: none; align-items: center; gap: 10px; height: 44px; padding: 0 16px; border: 0; border-radius: 999px; background: var(--paper-subtle); font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: background-color .2s ease; }
+.menu i { position: relative; width: 16px; height: 10px; }
+.menu i::before, .menu i::after { content: ""; position: absolute; left: 0; right: 0; height: 1.5px; border-radius: 1px; background: currentColor; transition: transform .3s cubic-bezier(.2, .8, .2, 1), top .3s cubic-bezier(.2, .8, .2, 1); }
+.menu i::before { top: 0; }
+.menu i::after { top: 8.5px; }
+.menu[aria-expanded="true"] { background: var(--ink); color: #fff; }
+.menu[aria-expanded="true"] i::before { top: 4.25px; transform: rotate(45deg); }
+.menu[aria-expanded="true"] i::after { top: 4.25px; transform: rotate(-45deg); }
+.spacer, .backdrop { display: none; }
+/* Phones and tablets: the header floats as a white pill over the page, and the menu drops down as a card under it.
+   Fixed rather than sticky so taps land reliably at the end of a page, where iOS rubber-banding moves sticky bars. */
 @media (max-width: 900px) {
-  .nav { display: none; }
+  .header { position: fixed; inset: 0 0 auto; padding: 10px 12px 0; background: none; pointer-events: none; }
+  .scrolled { box-shadow: none; }
+  .shell { position: relative; z-index: 1; height: 58px; padding: 0 7px 0 20px; background: #fff; border: 1px solid var(--line); border-radius: 999px; box-shadow: 0 6px 20px #1818160d; pointer-events: auto; transition: box-shadow .3s ease; }
+  .scrolled .shell { box-shadow: 0 10px 30px #1818161f; }
+  .spacer { display: block; height: 68px; flex: none; }
   .menu { display: inline-flex; }
-  .nav.open { max-height: calc(100svh - var(--nav-height)); overflow-y: auto; overscroll-behavior: contain; display: flex; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: flex-start; gap: 0; padding: 6px var(--gutter) 18px; background: #fff; box-shadow: 0 1px 0 var(--line); }
-  .nav.open a { width: 100%; padding: 12px 0; font-size: 18px; border-bottom: 1px solid var(--line); }
+  .nav { position: absolute; top: calc(100% + 8px); left: 0; right: 0; display: flex; flex-direction: column; align-items: stretch; gap: 0; max-height: calc(100svh - 96px); overflow-y: auto; overscroll-behavior: contain; padding: 6px 20px; background: #fff; border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 16px 40px #1818161f;
+    opacity: 0; visibility: hidden; transform: translateY(-8px) scale(.98); transform-origin: top center; transition: opacity .2s ease, transform .3s cubic-bezier(.2, .8, .2, 1), visibility 0s .3s; }
+  .nav.open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+  .nav a { padding: 14px 0; font-size: 18px; border-bottom: 1px solid var(--line); opacity: 0; transform: translateY(-4px); transition: opacity .25s ease, transform .3s cubic-bezier(.2, .8, .2, 1), color .2s; }
+  .nav a:last-child { border-bottom: 0; }
+  .nav.open a { opacity: 1; transform: none; }
+  .nav.open a:nth-child(2) { transition-delay: .03s; }
+  .nav.open a:nth-child(3) { transition-delay: .06s; }
+  .nav.open a:nth-child(4) { transition-delay: .09s; }
+  .nav.open a:nth-child(5) { transition-delay: .12s; }
+  .backdrop { display: block; position: fixed; inset: 0; border: 0; padding: 0; background: #18181626; pointer-events: auto; cursor: default; animation: fade-in .25s ease both; }
 }
+@keyframes fade-in { from { opacity: 0; } }
 @media (max-width: 560px) {
-  .shell { width: 100%; max-width: var(--content-max); margin-inline: auto; height: 64px; }
   .logo { height: 23px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .header, .nav a { transition: none; }
+  .header, .shell, .nav, .nav a, .menu, .menu i::before, .menu i::after { transition: none; }
+  .backdrop { animation: none; }
 }

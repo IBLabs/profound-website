@@ -26,13 +26,14 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", scroll);
   }, []);
 
-  return (
+  return (<>
     <header className={`${styles.header}${scrolled ? ` ${styles.scrolled}` : ""}`} onKeyDown={event => {
       if (event.key === "Escape" && menuOpen) {
         setMenuOpen(false);
         menuRef.current?.focus();
       }
     }}>
+      {menuOpen && <button className={styles.backdrop} type="button" aria-label="Close menu" tabIndex={-1} onClick={() => setMenuOpen(false)} />}
       <div className={styles.shell}>
         <Link href="/" aria-label="Profound Ventures, home" onClick={() => setMenuOpen(false)}>
           <Image className={styles.logo} src="/figma/profound-reference-logo.svg" alt="" width={114} height={26} priority />
@@ -44,9 +45,10 @@ export function SiteHeader() {
           <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
         </nav>
         <button ref={menuRef} className={styles.menu} type="button" aria-expanded={menuOpen} aria-controls="site-navigation" onClick={() => setMenuOpen(!menuOpen)}>
-          Menu <i aria-hidden="true" />
+          {menuOpen ? "Close" : "Menu"} <i aria-hidden="true" />
         </button>
       </div>
     </header>
-  );
+    <div className={styles.spacer} aria-hidden="true" />
+  </>);
 }

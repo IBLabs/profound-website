@@ -1,124 +1,33 @@
 "use client";
 
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { useState } from "react";
+import styles from "./for-founders.module.css";
 
 const founderPoints = [
-  {
-    title: "A CTO in your corner",
-    body: "From architecture decisions to your first ten engineers - our studio CTO is in the weekly stand-ups.",
-  },
-  {
-    title: "Design partners, not pipelines",
-    body: "We open doors to your first 3–5 design partners and help you turn them into early revenue.",
-  },
-  {
-    title: "Recruiting & org-building",
-    body: "Founder coaching, comp philosophy, leadership hires. We help you build a team that compounds.",
-  },
-  {
-    title: "Seed-ready, not just seed-funded",
-    body: "Pitch coaching, dataroom, investor intros, and a fully-prepped global roadshow when you're ready.",
-  },
+  { tag: "Tech", image: "/studio/studio-08.jpeg", title: <>A CTO <em>in your corner</em></>, body: "From architecture decisions to your first ten engineers, our studio CTO is in the weekly stand-ups." },
+  { tag: "GTM", image: "/studio/studio-05.jpeg", title: <>Design partners, <em>not pipelines</em></>, body: "We open doors to your first 3–5 design partners and help you turn them into early revenue." },
+  { tag: "People", image: "/studio/studio-02.jpeg", title: <>Recruiting <em>&amp; org-building</em></>, body: "Founder coaching, comp philosophy, leadership hires. We help you build a team that compounds." },
+  { tag: "Capital", image: "/studio/studio-06.jpeg", title: <>Seed-ready, <em>not just seed-funded</em></>, body: "Pitch coaching, dataroom, investor intros, and a fully-prepped global roadshow when you're ready." },
 ];
 
+// Matches the reference's expanding photo cards: hover, focus or tap opens a card, the rest collapse to grayscale strips.
 export function ForFounders() {
-  const shouldReduceMotion = useReducedMotion();
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: shouldReduceMotion ? 0 : 0.08,
-        delayChildren: shouldReduceMotion ? 0 : 0.04,
-      },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 16 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: shouldReduceMotion ? 0 : 0.55,
-        ease: [0.22, 1, 0.36, 1] as const,
-      },
-    },
-  };
-
+  const [open, setOpen] = useState(0);
   return (
-    <section className="for-founders-section" id="what-you-get" aria-labelledby="founders-headline">
-      <div className="for-founders-orbit-graphic" aria-hidden="true">
-        <div className="for-founders-orbit-ring" />
+    <section className={`section-shell ${styles.section}`} id="what-you-get" aria-labelledby="founders-headline">
+      <div className={styles.head}>
+        <h2 id="founders-headline">Not just a check,<br /><em>an additional <span className={styles.nowrap}>co-founder.</span></em></h2>
+        <p>Most VCs show up at board meetings. We show up Sunday morning. From your first hire to your first paying customer, our studio team works inside the company until you&apos;ve earned your seed round.</p>
       </div>
-      <div className="for-founders-bottom-orbit" aria-hidden="true">
-        <div className="for-founders-ring for-founders-ring--outer" />
-        <div className="for-founders-ring for-founders-ring--inner" />
-      </div>
-      <div className="for-founders-container section-shell">
-        <motion.div
-          className="for-founders-eyebrow-wrap"
-          initial="hidden"
-          animate={shouldReduceMotion ? "visible" : undefined}
-          whileInView={shouldReduceMotion ? undefined : "visible"}
-          viewport={{ once: true, margin: "-60px" }}
-          variants={containerVariants}
-        >
-          <motion.p className="eyebrow for-founders-eyebrow" variants={itemVariants}>
-            For founders
-          </motion.p>
-        </motion.div>
-
-        <div className="for-founders-split">
-          {/* Left Column: Title and Lead Copy aligned to the top point of list */}
-          <motion.div
-            className="for-founders-left"
-            initial="hidden"
-            animate={shouldReduceMotion ? "visible" : undefined}
-            whileInView={shouldReduceMotion ? undefined : "visible"}
-            viewport={{ once: true, margin: "-60px" }}
-            variants={containerVariants}
-          >
-            <motion.h2
-              id="founders-headline"
-              className="for-founders-headline"
-              variants={itemVariants}
-            >
-              <span>Not just a check,</span>
-              <span className="for-founders-emphasis">
-                <em>an additional co-founder.</em>
-              </span>
-            </motion.h2>
-
-            <motion.p className="for-founders-lead" variants={itemVariants}>
-              Most VCs show up at board meetings. We show up Sunday morning. From your first hire to your first paying customer, our studio team works inside the company — engineering, product, GTM, ops — until you&apos;ve earned your seed round.
-            </motion.p>
-          </motion.div>
-
-          {/* Right Column: List of points with darker divider lines */}
-          <motion.div
-            className="for-founders-right"
-            initial="hidden"
-            animate={shouldReduceMotion ? "visible" : undefined}
-            whileInView={shouldReduceMotion ? undefined : "visible"}
-            viewport={{ once: true, margin: "-60px" }}
-            variants={containerVariants}
-          >
-            <ul className="for-founders-list" role="list">
-              {founderPoints.map((point) => (
-                <motion.li
-                  key={point.title}
-                  className="for-founders-list-item"
-                  variants={itemVariants}
-                >
-                  <h3 className="for-founders-point-title">{point.title}</h3>
-                  <p className="for-founders-point-body">{point.body}</p>
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
-        </div>
+      <div className={styles.cards}>
+        {founderPoints.map(({ tag, image, title, body }, i) => (
+          <article key={tag} className={styles.card} data-open={open === i} tabIndex={0}
+            onMouseEnter={() => setOpen(i)} onFocus={() => setOpen(i)} onClick={() => setOpen(i)}>
+            {/* eslint-disable-next-line @next/next/no-img-element -- fixed-width crop that must not rescale while the card animates */}
+            <img src={image} alt="" loading="lazy" />
+            <div className={styles.body}><h3>{title}</h3><p>{body}</p></div>
+          </article>
+        ))}
       </div>
     </section>
   );

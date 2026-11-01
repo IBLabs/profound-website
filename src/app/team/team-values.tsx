@@ -15,24 +15,26 @@ const hatch = (x0: number, y0: number, x1: number, y1: number, step = 6) => {
 };
 const cross = (x: number, y: number) => `M${x - 5} ${y}h10M${x} ${y - 5}v10`;
 
-// Each value card is a small construction sheet in the hero's style: a ruled grid that fades at the edges,
-// faint guides inside the same fade, then the ink drawing and one hatched orange highlight on top.
-function Sheet({ id, guides, children }: { id: string; guides?: ReactNode; children: ReactNode }) {
-  const xs = [160, 126, 194, 71, 249, 16, 304], ys = [110, 76, 144, 21, 199];
+// Each value card is a small construction sheet in the hero's style: a ruled grid that runs out to the card's edges
+// and fades softly under the copy, faint guides in a tighter fade, then the ink drawing and one hatched orange highlight on top.
+const SHEET_OFFSETS = [0, 34, 89, 144, ...Array.from({ length: 12 }, (_, i) => 199 + i * 55)];
+const sheetDelay = (d: number) => d <= 144 ? d / 150 : .96 + (d - 144) / 900;
+function Sheet({ id, guides, children, viewBox = "0 0 320 220" }: { id: string; guides?: ReactNode; children: ReactNode; viewBox?: string }) {
+  const xs = [...new Set(SHEET_OFFSETS.flatMap(o => [160 - o, 160 + o]))], ys = [...new Set(SHEET_OFFSETS.flatMap(o => [110 - o, 110 + o]))];
   return (
-    <svg viewBox="0 0 320 220" aria-hidden="true">
+    <svg viewBox={viewBox} aria-hidden="true">
       <BrandGradient id={`${id}-gold`} />
       <defs>
         <radialGradient id={`${id}-fade`}><stop offset=".4" stopColor="#fff" /><stop offset="1" stopColor="#000" /></radialGradient>
         <mask id={`${id}-edges`}><rect width="320" height="220" fill={`url(#${id}-fade)`} /></mask>
+        <radialGradient id={`${id}-grid-fade`} gradientUnits="userSpaceOnUse" cx="160" cy="110" r="420"><stop offset=".5" stopColor="#fff" /><stop offset="1" stopColor="#000" /></radialGradient>
+        <mask id={`${id}-grid`} maskUnits="userSpaceOnUse" x="-600" y="-600" width="1520" height="1420"><rect x="-600" y="-600" width="1520" height="1420" fill={`url(#${id}-grid-fade)`} /></mask>
       </defs>
-      <g mask={`url(#${id}-edges)`}>
-        <g className={styles.heroGrid}>
-          {xs.map(x => <path key={`x${x}`} className={m(styles.growY)} d={`M${x} 0V220`} style={{ ...at(Math.abs(x - 160) / 150), transformOrigin: "160px 110px" }} />)}
-          {ys.map(y => <path key={`y${y}`} className={m(styles.growX)} d={`M0 ${y}H320`} style={{ ...at(.1 + Math.abs(y - 110) / 150), transformOrigin: "160px 110px" }} />)}
-        </g>
-        <g className={styles.construct}>{guides}</g>
+      <g className={styles.heroGrid} mask={`url(#${id}-grid)`}>
+        {xs.map(x => <path key={`x${x}`} className={m(styles.growY)} d={`M${x} -600V820`} style={{ ...at(sheetDelay(Math.abs(x - 160))), transformOrigin: "160px 110px" }} />)}
+        {ys.map(y => <path key={`y${y}`} className={m(styles.growX)} d={`M-600 ${y}H920`} style={{ ...at(.1 + sheetDelay(Math.abs(y - 110))), transformOrigin: "160px 110px" }} />)}
       </g>
+      <g mask={`url(#${id}-edges)`}><g className={styles.construct}>{guides}</g></g>
       {children}
     </svg>
   );
@@ -42,7 +44,7 @@ const STEP_W = 44, STEP_H = 28, STAIR_X = 70, GROUND = 180;
 const treadTop = (k: number) => GROUND - STEP_H * (k + 1);
 
 // 01: a staircase in elevation. Two markers (founder in ink, Profound in orange) hop up along drawn arcs.
-function StairsArtwork() {
+export function StairsArtwork() {
   const profile = `M${STAIR_X} ${GROUND}${[0, 1, 2, 3].map(k => `V${treadTop(k)}H${STAIR_X + STEP_W * (k + 1)}`).join("")}V${GROUND}Z`;
   const hops = [0, 1, 2].map(k => `M${92 + STEP_W * k} ${treadTop(k)}Q${114 + STEP_W * k} ${treadTop(k + 1) - 26} ${136 + STEP_W * k} ${treadTop(k + 1)}`);
   const summit = { x: STAIR_X + STEP_W * 3, y: treadTop(3) };
@@ -99,7 +101,7 @@ function BespokeArtwork() {
 const TLV = [92, 150] as const, NYC = [232, 106] as const, ROUTE_R = 110, ROUTE_C = [186.5, 206.1] as const;
 const ROUTE = `M${TLV[0]} ${TLV[1]}A${ROUTE_R} ${ROUTE_R} 0 0 1 ${NYC[0]} ${NYC[1]}`;
 
-function GlobalArtwork() {
+export function GlobalArtwork() {
   const [cx, cy] = ROUTE_C;
   return (
     <Sheet id="v-global" guides={<>
@@ -128,12 +130,69 @@ function GlobalArtwork() {
   );
 }
 
+// Studio hero: idea to seed as rings stacked up an axis, narrowing toward a hatched orange seed at the top.
+const RINGS = [[160, 64, 13], [134, 50, 10], [110, 38, 8]] as const;
+const SEED = [160, 56, 14] as const;
+export function StudioHeroArtwork() {
+  const [sx, sy, sr] = SEED;
+  return (
+    <Sheet id="s-hero" viewBox="-20 4 360 214" guides={<>
+      <path className={m(styles.draw)} d="M20 186H300" pathLength={1} style={at(.2)} />
+      <path className={m(styles.draw)} d="M58 160H96M224 160H262" pathLength={1} style={at(1.4)} />
+      <circle className={m(styles.draw, styles.ray)} cx={sx} cy={sy} r="30" pathLength={1} style={at(1.6)} />
+    </>}>
+      <clipPath id="s-hero-seed"><circle cx={sx} cy={sy} r={sr} /></clipPath>
+      <ellipse className={m(styles.draw, styles.compassRing)} cx="160" cy="186" rx="84" ry="16" pathLength={1} style={at(.3)} />
+      <path className={m(styles.draw, styles.ink)} d={`M160 186V${sy + sr}`} pathLength={1} style={at(.4)} />
+      {RINGS.map(([cy, rx, ry], i) => <ellipse key={cy} className={m(styles.draw, styles.tile)} cx="160" cy={cy} rx={rx} ry={ry} pathLength={1} style={at(.7 + i * .3)} />)}
+      <circle className={m(styles.fadeIn, styles.tileFill)} cx={sx} cy={sy} r={sr} fill="url(#s-hero-gold)" style={at(2.2)} />
+      <path className={m(styles.draw, styles.hatch)} d={hatch(sx - sr, sy - sr, sx + sr, sy + sr, 5)} clipPath="url(#s-hero-seed)" pathLength={1} style={at(2)} />
+      <circle className={m(styles.draw, styles.lensLine)} cx={sx} cy={sy} r={sr} pathLength={1} style={at(1.8)} />
+      <circle className={m(styles.arrive)} cx={sx} cy={sy} r={sr} style={at(2.6)} />
+      <circle className={m(styles.pop)} cx="52" cy="160" r="3.5" fill="var(--ink)" style={{ ...at(1.5), transformOrigin: "52px 160px" }} />
+      <circle className={m(styles.pop, styles.node)} cx="268" cy="160" r="3.5" style={{ ...at(1.9), transformOrigin: "268px 160px" }} />
+      <g className={styles.heroLabels}>
+        <text className={m(styles.rise)} x="52" y="182" textAnchor="middle" style={at(1.5)}>Idea</text>
+        <text className={m(styles.rise)} x="268" y="182" textAnchor="middle" style={at(1.9)}>Seed</text>
+      </g>
+    </Sheet>
+  );
+}
+
+// Studio team: the four pillars rising, each owned by one person; the tallest is the hatched highlight.
+const PILLARS = [["Tech", 40], ["GTM", 64], ["Org", 88], ["Capital", 112]] as const;
+export function PillarsArtwork() {
+  const x = (i: number) => 66 + i * 52, top = (h: number) => GROUND - h;
+  const last = `M${x(3)} ${top(112)}h30V${GROUND}h-30Z`;
+  return (
+    <Sheet id="s-pillars" guides={<>
+      <path className={m(styles.draw)} d={`M30 ${GROUND}H290`} pathLength={1} style={at(.2)} />
+      <path className={m(styles.draw, styles.ray)} d="M40 154L290 44" pathLength={1} style={at(1)} />
+    </>}>
+      <clipPath id="s-pillars-last"><path d={last} /></clipPath>
+      {PILLARS.slice(0, 3).map(([, h], i) => <path key={i} className={m(styles.draw, styles.ink)} d={`M${x(i)} ${GROUND}V${top(h)}h30V${GROUND}`} pathLength={1} style={at(.4 + i * .2)} />)}
+      <path className={m(styles.fadeIn, styles.summitFill)} d={last} fill="url(#s-pillars-gold)" style={{ animationDelay: "2s, 2.4s" }} />
+      <path className={m(styles.draw, styles.hatch)} d={hatch(x(3), top(112), x(3) + 30, GROUND)} clipPath="url(#s-pillars-last)" pathLength={1} style={at(1.6)} />
+      <path className={m(styles.draw, styles.lensLine)} d={last} pathLength={1} style={at(1.1)} />
+      <circle className={m(styles.pop, styles.node)} cx={x(3) + 15} cy={top(112)} r="3" style={{ ...at(1.9), transformOrigin: `${x(3) + 15}px ${top(112)}px` }} />
+      <circle className={styles.ripple} cx={x(3) + 15} cy={top(112)} r="3" style={{ animationDelay: "2.4s", transformOrigin: `${x(3) + 15}px ${top(112)}px` }} />
+      <g className={styles.heroLabels}>
+        {PILLARS.map(([label], i) => <text key={label} className={m(styles.rise)} x={x(i) + 15} y={GROUND + 22} textAnchor="middle" style={at(.6 + i * .2)}>{label}</text>)}
+      </g>
+    </Sheet>
+  );
+}
+
 // Team hero geometry: a vesica piscis. Each circle is centred on the other's rim, so they meet at P (top) and Q (bottom).
 const A = [155, 150] as const, B = [245, 150] as const, R = 90, P = [200, 72.06] as const, Q = [200, 227.94] as const;
 // ponytail: Fibonacci offsets give the grid its uneven, hand-ruled rhythm, dense at the centre and sparse at the edges.
 const FIB = [0, 21, 55, 89, 144];
-const gridX = [...new Set(FIB.flatMap(o => [200 - o, 200 + o]))];
+// Past the Fibonacci core the grid continues at an even 55 so it can rule the full width of the hero.
+const OUTER = Array.from({ length: 18 }, (_, i) => 199 + i * 55);
+const gridX = [...new Set([...FIB, ...OUTER].flatMap(o => [200 - o, 200 + o]))];
 const gridY = [...new Set(FIB.flatMap(o => [150 - o, 150 + o]))];
+// Lines grow outward from the centre; the far ones arrive only a little later so the whole grid settles together.
+const growDelay = (d: number) => d <= 144 ? d / 140 : 1.03 + (d - 144) / 900;
 const LENS = `M${P[0]} ${P[1]}A${R} ${R} 0 0 1 ${Q[0]} ${Q[1]}A${R} ${R} 0 0 1 ${P[0]} ${P[1]}Z`;
 const HATCH = Array.from({ length: 26 }, (_, i) => `M${60 + i * 7} 72L${216 + i * 7} 228`).join("");
 // The sides of the two equilateral triangles, extended past the drawing like ruled construction lines.
@@ -163,11 +222,11 @@ export function TeamHeroArtwork() {
           <mask id="hero-edges"><rect width="400" height="300" fill="url(#hero-fade)" /></mask>
           <clipPath id="hero-lens"><path d={LENS} /></clipPath>
         </defs>
+        <g className={styles.heroGrid}>
+          {gridX.map(x => <path key={`x${x}`} className={styles.growY} d={`M${x} 0V300`} style={at(growDelay(Math.abs(x - 200)))} />)}
+          {gridY.map(y => <path key={`y${y}`} className={styles.growX} d={`M-800 ${y}H1200`} style={at(.15 + growDelay(Math.abs(y - 150)))} />)}
+        </g>
         <g mask="url(#hero-edges)">
-          <g className={styles.heroGrid}>
-            {gridX.map(x => <path key={`x${x}`} className={styles.growY} d={`M${x} 0V300`} style={at(Math.abs(x - 200) / 140)} />)}
-            {gridY.map(y => <path key={`y${y}`} className={styles.growX} d={`M0 ${y}H400`} style={at(.15 + Math.abs(y - 150) / 140)} />)}
-          </g>
           <g className={styles.construct}>
             <path className={styles.growX} d="M0 150H400" style={at(.2)} />
             <path className={styles.growY} d="M200 0V300" style={at(.35)} />
@@ -198,19 +257,29 @@ export function TeamHeroArtwork() {
   );
 }
 
+// A drawing sheet whose looping parts run only while it is on screen (TeamExperience toggles data-animating).
+export function ArtStage({ className = "", children }: { className?: string; children: ReactNode }) {
+  return <div className={`${styles.stage} ${className}`} data-value-art>{children}</div>;
+}
+
+// The same, laid out like the Team hero: full-bleed, height-driven, the grid running out to both edges.
+export function CoverStage({ children }: { children: ReactNode }) {
+  return <div className={`${styles.heroArt} ${styles.cover}`} data-value-art>{children}</div>;
+}
+
 const values = [
-  { label: "01 / In the trenches", title: "Not advisors", description: "We sit alongside founders on the hardest problems, from recruiting to product and GTM, for as long as it takes.", Artwork: StairsArtwork },
-  { label: "02 / One at a time", title: "Bespoke, not batched", description: "No cohorts, no demo days. Every Studio company gets a program tuned to its team and its stage.", Artwork: BespokeArtwork },
-  { label: "03 / Global from day one", title: "Israel → US", description: "From day one we engineer for the U.S. market, through our network, the NYC roadshow and global partners.", Artwork: GlobalArtwork },
+  { title: "Not advisors", description: "We sit alongside founders on the hardest problems, from recruiting to product and GTM, for as long as it takes.", Artwork: StairsArtwork },
+  { title: "Bespoke, not batched", description: "No cohorts, no demo days. Every Studio company gets a program tuned to its team and its stage.", Artwork: BespokeArtwork },
+  { title: "Israel → US", description: "From day one we engineer for the U.S. market, through our network, the NYC roadshow and global partners.", Artwork: GlobalArtwork },
 ];
 
 export function TeamValues() {
   return (
     <div className={styles.grid}>
-      {values.map(({ label, title, description, Artwork }) => (
+      {values.map(({ title, description, Artwork }) => (
         <article className={`rv ${styles.card}`} key={title}>
-          <div className={styles.stage} data-value-art><Artwork /></div>
-          <div className={styles.copy}><small>{label}</small><h3>{title}</h3><p>{description}</p></div>
+          <ArtStage><Artwork /></ArtStage>
+          <div className={styles.copy}><h3>{title}</h3><p>{description}</p></div>
         </article>
       ))}
     </div>
