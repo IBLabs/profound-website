@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "../social";
 import Link from "next/link";
 import { TeamExperience } from "../team/team-experience";
 import { ArtStage, CoverStage, GlobalArtwork, PillarsArtwork, StairsArtwork, StudioHeroArtwork } from "../team/team-values";
 import "../team/team-reference.css";
 import styles from "./studio.module.css";
 
-export const metadata: Metadata = {
-  title: "Studio · Profound Ventures",
-  description: "Profound Studio: a pre-seed program built around one company at a time.",
-};
+export const metadata: Metadata = pageMetadata("Studio · Profound Ventures", "Profound Studio: a pre-seed program built around one company at a time.", "/studio");
 
 const points = [
   { title: "One company at a time", body: "No batches, no demo days. We're in your trenches, not in a classroom." },

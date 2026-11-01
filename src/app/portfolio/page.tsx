@@ -1,37 +1,37 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "../social";
 import { TeamExperience } from "../team/team-experience";
 import "../team/team-reference.css";
 import { IconSpin } from "./icon-spin";
 import styles from "./portfolio.module.css";
 
-export const metadata: Metadata = {
-  title: "Portfolio · Profound Ventures",
-  description: "A concentrated portfolio of unconventional teams across AI, infrastructure, consumer and applied software.",
-};
+export const metadata: Metadata = pageMetadata("Portfolio · Profound Ventures", "A concentrated portfolio of unconventional teams across AI, infrastructure, consumer and applied software.", "/portfolio");
 
 // Logos are one-colour ink versions of public/logos/portfolio, generated into public/logos/mono.
+// w is each logo's display width in px, set so they read at the same size: every mark gets the same bounding area
+// (width = sqrt(area × aspect)), nudged up for light, airy marks and down for dense ones ((0.32 / ink density)^0.3).
 const companies = [
-  { name: "Marquee", logo: "marquee", url: "https://themarquee.ai" },
-  { name: "Limy", logo: "limy", url: "https://limy.ai" },
-  { name: "Modelyo", logo: "modelyo", url: "https://www.modelyo.com" },
-  { name: "Perfect", logo: "perfect", url: "https://www.goperfect.com" },
-  { name: "Playo", logo: "playo", url: "https://playo.ai" },
-  { name: "Conntour", logo: "conntour", url: "https://www.conntour.com" },
-  { name: "Vinesight", logo: "vinesight", url: "https://www.vinesight.com" },
-  { name: "Unibeam", logo: "unibeam", url: "https://unibeam.com" },
-  { name: "Askit", logo: "askit", url: "https://start.askit-ai.com" },
-  { name: "Astrid", logo: "astrid", url: "https://astridentertainment.com" },
-  { name: "Ludeo", logo: "ludeo", url: "https://ludeo.com" },
-  { name: "Onebeat", logo: "onebeat", url: "https://onebeat.co" },
-  { name: "Rogue Security", logo: "rogue-security" },
-  { name: "Fincom", logo: "fincom-co", url: "https://fincom.co" },
-  { name: "Superlegal", logo: "superlegal", url: "https://www.superlegal.ai" },
-  { name: "Novacy", logo: "novacy", acquired: true },
-  { name: "Sensorz", logo: "sensorz" },
-  { name: "Chronom", logo: "chronom" },
-  { name: "Rivery", logo: "rivery", url: "https://rivery.io", acquired: true },
-  { name: "Guidde", logo: "guidde", url: "https://www.guidde.com" },
-  { name: "Bria", logo: "bria", url: "https://bria.ai" },
+  { name: "Marquee", logo: "marquee", w: 200, url: "https://themarquee.ai" },
+  { name: "Limy", logo: "limy", w: 146, url: "https://limy.ai" },
+  { name: "Modelyo", logo: "modelyo", w: 150, url: "https://www.modelyo.com" },
+  { name: "Perfect", logo: "perfect", w: 154, url: "https://www.goperfect.com" },
+  { name: "Playo", logo: "playo", w: 110, url: "https://playo.ai" },
+  { name: "Conntour", logo: "conntour", w: 176, url: "https://www.conntour.com" },
+  { name: "Vinesight", logo: "vinesight", w: 129, url: "https://www.vinesight.com" },
+  { name: "Unibeam", logo: "unibeam", w: 186, url: "https://unibeam.com" },
+  { name: "Askit", logo: "askit", w: 116, url: "https://start.askit-ai.com" },
+  { name: "Astrid", logo: "astrid", w: 156, url: "https://astridentertainment.com" },
+  { name: "Ludeo", logo: "ludeo", w: 134, url: "https://ludeo.com" },
+  { name: "Onebeat", logo: "onebeat", w: 156, url: "https://onebeat.co" },
+  { name: "Rogue Security", logo: "rogue-security", w: 132 },
+  { name: "Fincom", logo: "fincom-co", w: 160, url: "https://fincom.co" },
+  { name: "Superlegal", logo: "superlegal", w: 166, url: "https://www.superlegal.ai" },
+  { name: "Novacy", logo: "novacy", w: 141, acquired: true },
+  { name: "Sensorz", logo: "sensorz", w: 200 },
+  { name: "Chronom", logo: "chronom", w: 151 },
+  { name: "Rivery", logo: "rivery", w: 135, url: "https://rivery.io", acquired: true },
+  { name: "Guidde", logo: "guidde", w: 140, url: "https://www.guidde.com" },
+  { name: "Bria", logo: "bria", w: 84, url: "https://bria.ai" },
 ];
 
 /* Portfolio hero matched to the reference portfolio.html; the company cards are replaced by a one-colour logo grid. */
@@ -51,10 +51,10 @@ export default function PortfolioPage() {
 
         <section className="wrap sec" id="companies" aria-label="Portfolio companies">
           <ul className={`rv ${styles.logos}`}>
-            {companies.map(({ name, logo, url, acquired }) => {
+            {companies.map(({ name, logo, w, url, acquired }) => {
               const mark = <>
                 {/* eslint-disable-next-line @next/next/no-img-element -- small static marks of varying aspect ratio */}
-                <img src={`/logos/mono/${logo}.png`} alt={name} loading="lazy" />
+                <img src={`/logos/mono/${logo}.png`} alt={name} loading="lazy" style={{ "--w": w } as React.CSSProperties} />
                 {acquired && <small>Acquired</small>}
               </>;
               return (

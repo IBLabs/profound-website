@@ -30,10 +30,11 @@ const accent = Fraunces({
 
 import { SiteHeader } from "./site-header";
 import { SiteFooter } from "./site-footer";
+import { pageMetadata, siteUrl } from "./social";
 
 export const metadata: Metadata = {
-  title: "ProFound — Venture Capital",
-  description: "ProFound partners with exceptional founders from the first belief to the lasting company.",
+  metadataBase: new URL(siteUrl),
+  ...pageMetadata("Profound Ventures · Studio-driven seed fund", "The studio-driven seed fund building alongside Israel's next generation of founders.", "/"),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
