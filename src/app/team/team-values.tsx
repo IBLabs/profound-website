@@ -267,6 +267,37 @@ export function CoverStage({ children }: { children: ReactNode }) {
   return <div className={`${styles.heroArt} ${styles.cover}`} data-value-art>{children}</div>;
 }
 
+// AI teammates as abstract construction marks in the same 3:4 frame as the team photos.
+// Echo is a radar: rings, a turning sweep and the signals it has found. Iris is a compass rosette: six overlapping circles turning slowly around a pulsing centre.
+// Accents sit grey like the black-and-white photos and turn orange on hover (or once scrolled into view on touch screens).
+const SIGNALS = [[198, 162], [112, 238], [178, 268]];
+export function AgentPortrait({ kind }: { kind: "echo" | "iris" }) {
+  return (
+    <svg className={styles.agent} viewBox="0 0 300 400" role="img" aria-label={kind === "echo" ? "Echo, drawn as a radar sweep" : "Iris, drawn as a rosette of overlapping circles"}>
+      <g className={styles.agentGrid}>
+        {[30, 90, 150, 210, 270].map(x => <path key={`x${x}`} d={`M${x} 0V400`} />)}
+        {[20, 80, 140, 200, 260, 320, 380].map(y => <path key={`y${y}`} d={`M0 ${y}H300`} />)}
+      </g>
+      <path className={styles.agentGuide} d="M150 50V350M30 200H270" />
+      {kind === "echo" ? <>
+        <circle className={styles.agentGuide} cx="150" cy="200" r="104" />
+        <circle className={styles.agentInk} cx="150" cy="200" r="76" />
+        <circle className={styles.agentInk} cx="150" cy="200" r="44" />
+        <g className={styles.agentSweep}><path className={styles.agentAccent} d="M150 200V124" /><circle className={styles.agentDot} cx="150" cy="124" r="3.5" /></g>
+        {SIGNALS.map(([x, y]) => <circle key={x} className={styles.agentDot} cx={x} cy={y} r="3.5" />)}
+        <circle className={styles.agentDot} cx="150" cy="200" r="4" />
+      </> : <>
+        <circle className={styles.agentGuide} cx="150" cy="200" r="104" />
+        <g className={styles.agentOrbit}>
+          {[0, 1, 2, 3, 4, 5].map(i => <circle key={i} className={styles.agentInk} cx={(150 + Math.cos(i * Math.PI / 3) * 38).toFixed(1)} cy={(200 + Math.sin(i * Math.PI / 3) * 38).toFixed(1)} r="38" />)}
+        </g>
+        <circle className={styles.agentAccent} cx="150" cy="200" r="38" />
+        <circle className={`${styles.agentDot} ${styles.agentPulse}`} cx="150" cy="200" r="6" />
+      </>}
+    </svg>
+  );
+}
+
 const values = [
   { title: "Not advisors", description: "We sit alongside founders on the hardest problems, from recruiting to product and GTM, for as long as it takes.", Artwork: StairsArtwork },
   { title: "Bespoke, not batched", description: "No cohorts, no demo days. Every Studio company gets a program tuned to its team and its stage.", Artwork: BespokeArtwork },

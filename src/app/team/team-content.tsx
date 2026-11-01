@@ -1,4 +1,4 @@
-import { TeamHeroArtwork, TeamValues } from "./team-values";
+import { AgentPortrait, TeamHeroArtwork, TeamValues } from "./team-values";
 
 /* Team layout and artwork matched to https://profound-preview.vercel.app/team.html. */
 export function TeamContent() {
@@ -29,6 +29,8 @@ export function TeamContent() {
       <article className="person rv"><div className="ph"><img src="/team/paz.png" alt="Paz Lazar" loading="lazy" /></div><h3>Paz Lazar</h3><p className="role">Chief of Staff</p><p className="bio">Connective tissue across the partners, studio and portfolio. Runs operations, project execution and the cadence that keeps the team in motion.</p></article>
       <article className="person rv"><div className="ph"><img src="/team/reference/tomer.webp" alt="Tomer Haviv" loading="lazy" /></div><h3>Tomer Haviv</h3><p className="role">Analyst</p><p className="bio">Supports deal sourcing, diligence and portfolio company analytics across the fund and the studio.</p></article>
       <article className="person rv"><div className="ph"><img src="/team/matan.jpg" alt="Matan Malka" loading="lazy" /></div><h3>Matan Malka</h3><p className="role">Assistant Controller</p><p className="bio">Owns fund accounting, capital calls and portfolio reporting. Keeps the financial backbone of the fund precise and audit-ready.</p></article>
+      <article className="person rv"><div className="ph"><AgentPortrait kind="echo" /></div><h3>Echo</h3><p className="role">AI Analyst</p><p className="bio">Our autonomous research analyst. Echo continuously scans the Israeli ecosystem, drafts memos, runs market mapping and surfaces founders worth meeting, around the clock.</p></article>
+      <article className="person rv"><div className="ph"><AgentPortrait kind="iris" /></div><h3>Iris</h3><p className="role">AI Personal Assistant</p><p className="bio">Our AI chief of staff. Iris handles inbox triage, scheduling, founder follow-ups and meeting prep, so the partners spend more time in the trenches with founders.</p></article>
     </div>
 
 

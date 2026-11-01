@@ -86,6 +86,24 @@
 @keyframes sweep { 0% { transform: rotate(0); opacity: 0; } 8% { opacity: 1; } 100% { transform: rotate(var(--sweep)); opacity: 1; } }
 @keyframes arrive { 0%, 72% { opacity: 0; transform: scale(.6); } 76% { opacity: .7; } 100% { opacity: 0; transform: scale(1.7); } }
 @keyframes cross-market { 0%, 12% { stroke-dashoffset: 0; opacity: 0; } 18% { opacity: 1; } 75% { stroke-dashoffset: -1; opacity: 1; } 85%, 100% { stroke-dashoffset: -1; opacity: 0; } }
+/* AI teammate marks, sized by the shared .ph frame like the photos. */
+.agent { display: block; width: 100%; height: 100%; fill: none; stroke-linecap: round; }
+.agentGrid { stroke: var(--ink); stroke-width: .6; opacity: .1; }
+.agentGuide { stroke: var(--ink); stroke-width: .7; stroke-dasharray: 3 5; opacity: .3; }
+.agentInk { stroke: var(--ink); stroke-width: 1.3; }
+.agentAccent { stroke: var(--muted-light); stroke-width: 1.6; transition: stroke .5s; }
+.agentDot { fill: var(--muted-light); stroke: none; transition: fill .5s; }
+:global(.person):hover .agentAccent { stroke: var(--orange); }
+:global(.person):hover .agentDot { fill: var(--orange); }
+@media (hover: none), (max-width: 900px) {
+  :global(.person.lit) .agentAccent { stroke: var(--orange); }
+  :global(.person.lit) .agentDot { fill: var(--orange); }
+}
+.agentSweep { transform-box: view-box; transform-origin: 150px 200px; animation: agent-sweep 6s linear infinite; }
+.agentOrbit { transform-box: view-box; transform-origin: 150px 200px; animation: agent-sweep 40s linear infinite; }
+.agentPulse { transform-box: fill-box; transform-origin: center; animation: agent-pulse 3.2s ease-in-out infinite; }
+@keyframes agent-sweep { to { transform: rotate(360deg); } }
+@keyframes agent-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(.55); } }
 @media (min-width: 701px) and (max-width: 1100px) {
   .grid { grid-template-columns: minmax(0, 1fr); }
   .card { display: grid; grid-template-columns: minmax(260px, 1fr) minmax(0, 1fr); align-items: center; }
