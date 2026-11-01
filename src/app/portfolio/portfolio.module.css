@@ -13,7 +13,7 @@
 .logos img { width: calc(var(--w) * 1px); max-width: 100%; height: auto; opacity: .78; transition: opacity .2s ease; }
 .logos a:hover, .logos a:focus-visible { background: var(--surface-warm); }
 .logos a:hover img, .logos a:focus-visible img { opacity: 1; }
-.logos small { position: absolute; left: 16px; bottom: 12px; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--orange); }
+.logos small { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); white-space: nowrap; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--orange); }
 
 @media (max-width: 700px) {
   .logos { grid-template-columns: 1fr 1fr; }
