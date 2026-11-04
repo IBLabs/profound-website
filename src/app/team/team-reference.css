@@ -15,7 +15,7 @@
 }
 .reference-team *,.reference-team *::before,.reference-team *::after{box-sizing:border-box}
 .reference-team{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-.reference-team{margin:0;background:#fff;color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.reference-team{margin:0;background: var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 .reference-team img{display:block;max-width:100%}
 .reference-team a{color:inherit;text-decoration:none}
 .reference-team h1,.reference-team h2,.reference-team h3,.reference-team p{margin:0;font-weight:400}
@@ -49,7 +49,7 @@
 .reference-team .sh.one{grid-template-columns:1fr}
 .reference-team .rule{position:relative;height:12px;margin:0 var(--gutter) clamp(72px,8vw,120px)}
 .reference-team .rule::before{content:"";position:absolute;left:18px;right:18px;top:50%;border-top:1.3px dashed #c6beb2}
-.reference-team .rule i{position:absolute;left:0;top:0;width:12px;height:12px;border:1.3px solid var(--ink);border-radius:2px;background:#fff}
+.reference-team .rule i{position:absolute;left:0;top:0;width:12px;height:12px;border:1.3px solid var(--ink);border-radius:2px;background: var(--paper)}
 .reference-team .rule i + i{left:auto;right:0;border-radius:50%}
 .reference-team .ill [stroke-dasharray]{animation:team-march 48s linear infinite}
 @keyframes team-march{to{stroke-dashoffset:-504}}
