@@ -1,6 +1,6 @@
 .sections {
   --gutter: var(--page-gutter);
-  background: #fff;
+  background: var(--paper);
   color: var(--ink);
   font-family: var(--font-libre), Georgia, serif;
 }
