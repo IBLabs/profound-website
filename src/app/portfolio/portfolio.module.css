@@ -7,16 +7,24 @@
 .block polygon { stroke-width: .6px !important; }
 .block path, .block :global(.cap) { stroke-width: 2px !important; }
 
-/* One-colour logo grid on open white, no dividers. */
-.logos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
-.logos a, .logos span { position: relative; display: grid; place-items: center; height: clamp(130px, 12vw, 180px); padding: 0 clamp(28px, 4vw, 64px); border-radius: var(--radius-card); transition: background-color .2s ease; }
-.logos img { width: calc(var(--w) * 1px); max-width: 100%; height: auto; opacity: .78; transition: opacity .2s ease; }
-.logos a:hover, .logos a:focus-visible { background: var(--surface-warm); }
-.logos a:hover img, .logos a:focus-visible img { opacity: 1; }
-.logos small { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); white-space: nowrap; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--orange); }
+/* One-colour logos in website-v2's company cards: warm card, flips to ink on hover (logo inverts to white), the icon slides in. */
+.logos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.logos a, .logos span { position: relative; display: grid; place-items: center; height: clamp(250px, 20vw, 300px); padding: 0 clamp(28px, 4vw, 64px); border-radius: var(--radius-card); background: var(--surface-warm); }
+.logos img { width: calc(var(--w) * 1px); max-width: 100%; height: auto; opacity: .78; }
+.logos a:hover, .logos a:focus-visible { background: var(--ink); }
+.logos a:hover img, .logos a:focus-visible img { opacity: 1; filter: invert(1); }
+.logos small { position: absolute; left: clamp(22px, 2.2vw, 30px); top: clamp(22px, 2.2vw, 30px); padding: 3px 7px; border-radius: 4px; background: linear-gradient(45deg, #F6961C, #F6631C 40%, #EE4711 70%, #D91C07); color: #fff; font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+.arrow { position: absolute; top: clamp(22px, 2.2vw, 30px); right: clamp(22px, 2.2vw, 30px); width: 18px; height: 18px; opacity: 0; transform: translate(-6px, 6px); transition: opacity .3s, transform .45s cubic-bezier(.2, .7, .1, 1); }
+.logos a:hover .arrow, .logos a:focus-visible .arrow { opacity: 1; transform: none; }
+.logos span .arrow { display: none; }
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
   .logos { grid-template-columns: 1fr 1fr; }
-  .logos a, .logos span { height: 110px; padding: 0 20px; }
+}
+@media (max-width: 560px) {
+  .logos a, .logos span { height: 160px; padding: 0 20px; }
   .logos img { width: calc(var(--w) * .7px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .arrow { transition: none; }
 }

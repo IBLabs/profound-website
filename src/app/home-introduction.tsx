@@ -32,17 +32,6 @@ function HoverText({ text }: { text: string }) {
   ));
 }
 
-function FounderPortraits({ people, delay = 0 }: { people: string[]; delay?: number }) {
-  return (
-    <span className={styles.portraits} data-hover-unit aria-hidden="true">
-      {people.map((person, index) => (
-        <span className={styles.portrait} key={person} style={{ animationDelay: `${index * 5 - 20 + delay}s` }}>
-          <Image src={`/team/${person}`} alt="" fill sizes="80px" />
-        </span>
-      ))}
-    </span>
-  );
-}
 
 export function HomeIntroduction() {
   return (
@@ -64,7 +53,7 @@ export function HomeIntroduction() {
       <section className={styles.portfolio} aria-labelledby="founder-statement">
         <ScrollReveal className={styles.statement}>
           <InteractiveStatement>
-            <HoverText text="Profound founders" /> <FounderPortraits people={["danielle.jpg", "lee.jpg", "paz.png", "noy.png"]} /> <HoverText text="build" /> <em className={styles.noBreak}><HoverText text="category-defining" /></em> <HoverText text="software" /> <FounderPortraits people={["tomer.jpeg", "matan.jpg", "ron.jpg", "Adi.jpeg"]} delay={1.25} /> <HoverText text="and AI companies." />
+            <HoverText text="Profound founders" /> <HoverText text="build" /> <em className={styles.noBreak}><HoverText text="category-defining" /></em> <HoverText text="software" /> <HoverText text="and AI companies." />
           </InteractiveStatement>
         </ScrollReveal>
         <div className={styles.strip}>

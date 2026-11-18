@@ -13,7 +13,7 @@ export function SiteFooter() {
         <div className={styles.actions}>
           <a className={styles.primary} href={`mailto:${email}?subject=Pitch%3A%20`}>
             Pitch us your idea
-            <i aria-hidden="true"><svg viewBox="0 0 359.83 359.83"><path fill="currentColor" d="M359.83 55.06v249.71c0 30.41-24.65 55.06-55.06 55.06h-64.53L318.88 62.49 120.66 359.83h-65.6C24.65 359.83 0 335.18 0 304.77v-65.6L297.34 40.95 0 119.58V55.06C0 24.65 24.65 0 55.06 0h249.71c30.41 0 55.06 24.65 55.06 55.06Z"/></svg></i>
+            <i aria-hidden="true"><svg viewBox="0 0 359.83 359.83"><path fill="currentColor" d="M359.83 55.06v249.71c0 30.41-24.65 55.06-55.06 55.06H210.86L306.58 84.2 124.86 359.83H55.06C24.65 359.83 0 335.18 0 304.77V234.97L275.63 53.25 0 148.97V55.06C0 24.65 24.65 0 55.06 0h249.71c30.41 0 55.06 24.65 55.06 55.06Z"/></svg></i>
           </a>
         </div>
       </section>

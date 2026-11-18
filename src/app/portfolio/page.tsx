@@ -34,7 +34,9 @@ const companies = [
   { name: "Bria", logo: "bria", w: 84, url: "https://bria.ai" },
 ];
 
-/* Portfolio hero matched to the reference portfolio.html; the company cards are replaced by a one-colour logo grid. */
+const PF_ICON = "M359.83 55.06v249.71c0 30.41-24.65 55.06-55.06 55.06H210.86L306.58 84.2 124.86 359.83H55.06C24.65 359.83 0 335.18 0 304.77V234.97L275.63 53.25 0 148.97V55.06C0 24.65 24.65 0 55.06 0h249.71c30.41 0 55.06 24.65 55.06 55.06Z";
+
+/* Portfolio hero matched to the reference portfolio.html; logos sit in website-v2's company cards. */
 export default function PortfolioPage() {
   return (
     <TeamExperience className="">
@@ -56,6 +58,7 @@ export default function PortfolioPage() {
                 {/* eslint-disable-next-line @next/next/no-img-element -- small static marks of varying aspect ratio */}
                 <img src={`/logos/mono/${logo}.png`} alt={name} loading="lazy" style={{ "--w": w } as React.CSSProperties} />
                 {acquired && <small>Acquired</small>}
+                <svg className={styles.arrow} viewBox="0 0 359.83 359.83" aria-hidden="true"><path fill="url(#pf-grad)" d={PF_ICON} /></svg>
               </>;
               return (
                 <li key={name}>
@@ -64,6 +67,9 @@ export default function PortfolioPage() {
               );
             })}
           </ul>
+          <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true">
+            <linearGradient id="pf-grad" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#F6961C" /><stop offset=".4" stopColor="#F6631C" /><stop offset=".7" stopColor="#EE4711" /><stop offset="1" stopColor="#D91C07" /></linearGradient>
+          </svg>
         </section>
       </main>
     </TeamExperience>
